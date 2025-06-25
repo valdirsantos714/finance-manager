@@ -1,0 +1,12 @@
+<h1>Renda Dashboard</h1>
+<p>Gerencie suas rendas aqui.</p>
+
+@for(renda of rendas; track renda) {
+  <div>
+    <h2>{{ renda.name }}</h2>
+    <p>Id: {{ renda.id }}</p>
+    <p>Valor: {{ renda.description }}</p>
+    <p>Data: {{ renda.date | date }}</p>
+    <p>Categoria: {{ renda.value }}</p>
+  </div>
+}
