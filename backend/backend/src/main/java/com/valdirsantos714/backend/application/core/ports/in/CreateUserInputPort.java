@@ -1,4 +1,7 @@
 package com.valdirsantos714.backend.application.core.ports.in;
 
-public class CreateUserInputPort {
+import com.valdirsantos714.backend.application.core.domain.User;
+
+public interface CreateUserInputPort {
+    void create(User user);
 }

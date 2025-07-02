@@ -1,4 +1,7 @@
 package com.valdirsantos714.backend.application.core.ports.in;
 
-public class CreateIncomeInputPort {
+import com.valdirsantos714.backend.application.core.domain.Income;
+
+public interface CreateIncomeInputPort {
+    void create(Income income);
 }

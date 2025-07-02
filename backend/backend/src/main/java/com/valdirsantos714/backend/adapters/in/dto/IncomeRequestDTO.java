@@ -1,4 +1,4 @@
-package com.valdirsantos714.backend.dtos;
+package com.valdirsantos714.backend.adapters.in.dto;
 
 import jakarta.validation.constraints.*;
 

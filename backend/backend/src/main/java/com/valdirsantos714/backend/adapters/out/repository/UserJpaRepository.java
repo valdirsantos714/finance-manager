@@ -1,4 +1,7 @@
 package com.valdirsantos714.backend.adapters.out.repository;
 
-public class UserJpaRepository {
+import com.valdirsantos714.backend.adapters.out.repository.entity.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
 }

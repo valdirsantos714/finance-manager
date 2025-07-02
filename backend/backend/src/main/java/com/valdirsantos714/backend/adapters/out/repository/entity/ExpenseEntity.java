@@ -1,4 +1,40 @@
 package com.valdirsantos714.backend.adapters.out.repository.entity;
 
-public class ExpenseEntity {
+import com.valdirsantos714.backend.application.core.domain.CommomAtributes;
+import com.valdirsantos714.backend.application.core.domain.User;
+import com.valdirsantos714.backend.application.core.domain.enums.ExpenseCategory;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+
+@Entity
+@Table(name = "TB_EXPENSE")
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@NoArgsConstructor
+@AllArgsConstructor
+public class ExpenseEntity extends CommomAtributes {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    private String description;
+
+    @Column(nullable = false)
+    private Double amount;
+    private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private ExpenseCategory category;
+
 }

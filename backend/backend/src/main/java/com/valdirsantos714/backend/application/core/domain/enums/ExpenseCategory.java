@@ -1,4 +1,4 @@
-package com.valdirsantos714.backend.core.domain;
+package com.valdirsantos714.backend.application.core.domain.enums;
 
 public enum ExpenseCategory {
     FAMILY,
