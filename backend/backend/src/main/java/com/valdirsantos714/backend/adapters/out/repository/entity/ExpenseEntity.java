@@ -1,6 +1,5 @@
 package com.valdirsantos714.backend.adapters.out.repository.entity;
 
-import com.valdirsantos714.backend.application.core.domain.CommomAtributes;
 import com.valdirsantos714.backend.application.core.domain.User;
 import com.valdirsantos714.backend.application.core.domain.enums.ExpenseCategory;
 import jakarta.persistence.*;
@@ -15,7 +14,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExpenseEntity extends CommomAtributes {
+public class ExpenseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
