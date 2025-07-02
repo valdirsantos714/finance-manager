@@ -1,0 +1,10 @@
+@for(item of items; track item) {
+  <div class="item">
+    <div class="item-header">
+      <h3>{{ item.name }}</h3>
+      <span class="item-status">{{ item.status }}</span>
+    </div>
+    <p class="item-description">{{ item.description }}</p>
+    <button (click)="actionEvent.emit(item)">View Details</button>
+  </div>
+}
