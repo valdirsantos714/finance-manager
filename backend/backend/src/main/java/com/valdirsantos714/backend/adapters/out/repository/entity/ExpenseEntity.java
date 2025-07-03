@@ -1,6 +1,7 @@
 package com.valdirsantos714.backend.adapters.out.repository.entity;
 
-import com.valdirsantos714.backend.application.core.domain.User;
+import com.valdirsantos714.backend.adapters.out.repository.mapper.UserMapper;
+import com.valdirsantos714.backend.application.core.domain.Expense;
 import com.valdirsantos714.backend.application.core.domain.enums.ExpenseCategory;
 import jakarta.persistence.*;
 import lombok.*;
@@ -30,10 +31,18 @@ public class ExpenseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity user;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
+    @Enumerated(EnumType.STRING)
     private ExpenseCategory category;
 
+    public ExpenseEntity(Expense expense) {
+        this.id = expense.getId();
+        this.name = expense.getName();
+        this.description = expense.getDescription();
+        this.amount = expense.getAmount();
+        this.date = expense.getDate();
+        this.user = UserMapper.toUserEntity(expense.getUser());
+        this.category = expense.getCategory();
+    }
 }

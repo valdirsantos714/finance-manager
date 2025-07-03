@@ -1,6 +1,7 @@
 package com.valdirsantos714.backend.adapters.out.repository.entity;
 
-import com.valdirsantos714.backend.application.core.domain.User;
+import com.valdirsantos714.backend.adapters.out.repository.mapper.UserMapper;
+import com.valdirsantos714.backend.application.core.domain.Income;
 import com.valdirsantos714.backend.application.core.domain.enums.IncomeCategory;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,8 +32,18 @@ public class IncomeEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity user;
 
     @Enumerated(EnumType.STRING)
     private IncomeCategory category;
+
+    public IncomeEntity(Income income) {
+        this.id = income.getId();
+        this.name = income.getName();
+        this.description = income.getDescription();
+        this.amount = income.getAmount();
+        this.date = income.getDate();
+        this.user = UserMapper.toUserEntity(income.getUser());
+        this.category = income.getCategory();
+    }
 }

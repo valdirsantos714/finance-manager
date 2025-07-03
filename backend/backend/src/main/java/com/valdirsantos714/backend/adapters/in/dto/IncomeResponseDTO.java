@@ -1,5 +1,7 @@
 package com.valdirsantos714.backend.adapters.in.dto;
 
+import com.valdirsantos714.backend.application.core.domain.enums.IncomeCategory;
+
 import java.time.LocalDate;
 
 public record IncomeResponseDTO(
@@ -9,6 +11,5 @@ public record IncomeResponseDTO(
         Double amount,
         LocalDate date,
         Long userId,
-        String userName,
-        String category
+        IncomeCategory category
 ) {}
