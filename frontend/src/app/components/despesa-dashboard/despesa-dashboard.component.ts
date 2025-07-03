@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { DespesasResponse } from '../../models/DespesasResponse';
+import { ExpenseResponse } from '../../models/ExpenseResponse';
 import { Subject, takeUntil } from 'rxjs';
-import { DespesaService } from '../../services/despesa-service/despesa.service';
-import { DespesasRequest } from '../../models/DespesasRequest';
+import { ExpenseService } from '../../services/expense-service/expense.service';
+import { ExpenseRequest } from '../../models/ExpenseRequest';
 
 @Component({
   selector: 'app-despesa-dashboard',
@@ -11,19 +11,19 @@ import { DespesasRequest } from '../../models/DespesasRequest';
 })
 export class DespesaDashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  public despesas!: DespesasResponse[];
+  public despesas!: ExpenseResponse[];
 
-  constructor(private despesaService: DespesaService ) { }
+  constructor(private expenseService: ExpenseService ) { }
 
   ngOnInit(): void {
-    this.getDespesas();
+    this.getExpenses();
   }
 
-  getDespesas(): void {
-    this.despesaService.getAllDespesas()
+  getExpenses(): void {
+    this.expenseService.getAllExpenses()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (despesas: DespesasResponse[]) => {
+        next: (despesas: ExpenseResponse[]) => {
           this.despesas = despesas;
         },
         error: (error) => {
@@ -32,13 +32,13 @@ export class DespesaDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  updateDespesa(idDespesa: number, updatedDespesa: DespesasRequest): void {
-    this.despesaService.updateDespesa(idDespesa, updatedDespesa)
+  updateExpense(idDespesa: number, updatedDespesa: ExpenseRequest): void {
+    this.expenseService.updateExpense(idDespesa, updatedDespesa)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (updatedDespesaResponse: DespesasResponse) => {
+        next: (updatedDespesaResponse: ExpenseResponse) => {
           console.log('Despesa updated successfully:', updatedDespesaResponse);
-          this.getDespesas(); // Refresh the list after update
+          this.getExpenses(); // Refresh the list after update
         },
         error: (error) => {
           console.error('Error updating despesa:', error);
@@ -46,13 +46,13 @@ export class DespesaDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  deleteDespesa(idDespesa: number): void {
-    this.despesaService.deleteDespesa(idDespesa)
+  deleteExpense(idDespesa: number): void {
+    this.expenseService.deleteExpense(idDespesa)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           console.log('Despesa deleted successfully');
-          this.getDespesas(); // Refresh the list after deletion
+          this.getExpenses(); // Refresh the list after deletion
         },
         error: (error) => {
           console.error('Error deleting despesa:', error);

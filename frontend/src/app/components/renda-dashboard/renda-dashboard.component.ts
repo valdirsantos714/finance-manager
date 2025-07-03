@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { RendasResponse } from '../../models/RendasResponse';
-import { RendaService } from '../../services/renda-service/renda.service';
+import { IncomeResponse } from '../../models/IncomeResponse';
+import { IncomeService } from '../../services/income-service/income.service';
 
 @Component({
   selector: 'app-renda-dashboard',
@@ -10,20 +10,21 @@ import { RendaService } from '../../services/renda-service/renda.service';
 })
 export class RendaDashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  public rendas!: RendasResponse[];
+  public rendas!: IncomeResponse[];
 
-  constructor(private rendaService: RendaService) {
+  constructor(private incomeService: IncomeService) { 
+    // You can initialize any properties or services here if needed
   }
   
   ngOnInit(): void {
-    this.getRendas();
+    this.getIncomes();
   }
 
-  getRendas(): void {
-    this.rendaService.getAllRendas()
+  getIncomes(): void {
+    this.incomeService.getAllIncomes()
     .pipe(takeUntil(this.destroy$))
     .subscribe({
-      next: (rendas: RendasResponse[]) => {
+      next: (rendas: IncomeResponse[]) => {
         this.rendas = rendas;
       },
       error: (error) => {
@@ -32,13 +33,13 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  updateRenda(idRenda: number): void {
-    this.rendaService.updateRenda(idRenda)
+  updateIncome(idRenda: number): void {
+    this.incomeService.updateIncome(idRenda)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (updatedRenda: RendasResponse) => {
+        next: (updatedRenda: IncomeResponse) => {
           console.log('Renda updated successfully:', updatedRenda);
-          this.getRendas(); 
+          this.getIncomes(); 
         },
         error: (error) => {
           console.error('Error updating renda:', error);
@@ -46,13 +47,13 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  deleteRenda(idRenda: number): void {
-    this.rendaService.deleteRenda(idRenda)
+  deleteIncome(idRenda: number): void {
+    this.incomeService.deleteIncome(idRenda)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           console.log('Renda deleted successfully');
-          this.getRendas(); 
+          this.getIncomes(); 
         },
         error: (error) => {
           console.error('Error deleting renda:', error);
