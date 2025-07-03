@@ -1,42 +1,45 @@
 package com.valdirsantos714.backend.application.service;
 
-
-import com.valdirsantos714.backend.adapters.in.dto.ExpenseRequest;
 import com.valdirsantos714.backend.adapters.in.dto.UserRequestDTO;
-import com.valdirsantos714.backend.application.core.domain.Expense;
+import com.valdirsantos714.backend.adapters.out.repository.UserRepositoryAdapter;
+import com.valdirsantos714.backend.adapters.out.repository.mapper.UserMapper;
 import com.valdirsantos714.backend.application.core.domain.User;
-import com.valdirsantos714.backend.application.core.ports.in.CreateExpenseInputPort;
-import com.valdirsantos714.backend.application.core.ports.in.CreateUserInputPort;
-import com.valdirsantos714.backend.application.ports.service.ExpenseService;
-import com.valdirsantos714.backend.application.ports.service.UserService;
-import lombok.RequiredArgsConstructor;
+import com.valdirsantos714.backend.application.usecase.UserUseCases;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserUseCases {
 
-    private final CreateUserInputPort createUserInputPort;
+    private final UserRepositoryAdapter userRepositoryAdapter;
+
+    public UserServiceImpl(UserRepositoryAdapter userRepositoryAdapter) {
+        this.userRepositoryAdapter = userRepositoryAdapter;
+    }
 
     @Override
-    public User save(UserRequestDTO request) {
-        return null;
+    public User save(UserRequestDTO user) {
+        return userRepositoryAdapter.save(UserMapper.toUser(user));
     }
 
     @Override
     public List<User> findAll() {
-        return List.of();
+        return userRepositoryAdapter.findAll();
     }
 
     @Override
-    public User update(Long id, UserRequestDTO request) {
-        return null;
+    public User findById(Long id) {
+        return userRepositoryAdapter.findById(id);
+    }
+
+    @Override
+    public User update(Long id, UserRequestDTO User) {
+        return userRepositoryAdapter.update(id, UserMapper.toUser(User));
     }
 
     @Override
     public void delete(Long id) {
-
+        userRepositoryAdapter.delete(id);
     }
 }

@@ -1,42 +1,48 @@
 package com.valdirsantos714.backend.application.service;
 
-
-import com.valdirsantos714.backend.adapters.in.dto.ExpenseRequest;
+import com.valdirsantos714.backend.adapters.in.dto.ExpenseRequestDTO;
+import com.valdirsantos714.backend.adapters.out.repository.ExpenseRepositoryAdapter;
+import com.valdirsantos714.backend.adapters.out.repository.mapper.ExpenseMapper;
 import com.valdirsantos714.backend.application.core.domain.Expense;
-import com.valdirsantos714.backend.application.core.ports.in.CreateExpenseInputPort;
-import com.valdirsantos714.backend.application.ports.service.ExpenseService;
-import lombok.RequiredArgsConstructor;
+import com.valdirsantos714.backend.application.usecase.ExpenseUseCases;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
-public class ExpenseServiceImpl implements ExpenseService {
+public class ExpenseServiceImpl implements ExpenseUseCases {
 
-    private final CreateExpenseInputPort createExpenseInputPort;
+    private final ExpenseRepositoryAdapter expenseRepositoryAdapter;
     private final UserServiceImpl userService;
 
+    public ExpenseServiceImpl(ExpenseRepositoryAdapter expenseRepositoryAdapter, UserServiceImpl userService) {
+        this.expenseRepositoryAdapter = expenseRepositoryAdapter;
+        this.userService = userService;
+    }
+
     @Override
-    public Expense save(ExpenseRequest request) {
-
-        createExpenseInputPort.create(request);
-
-        return null;
+    public Expense save(ExpenseRequestDTO expense) {
+        userService.findById(expense.userId());
+        return expenseRepositoryAdapter.save(ExpenseMapper.toExpense(expense));
     }
 
     @Override
     public List<Expense> findAll() {
-        return List.of();
+        return expenseRepositoryAdapter.findAll();
     }
 
     @Override
-    public Expense update(Long id, ExpenseRequest request) {
-        return null;
+    public Expense findById(Long id) {
+        return expenseRepositoryAdapter.findById(id);
+    }
+
+    @Override
+    public Expense update(Long id, ExpenseRequestDTO expense) {
+        return expenseRepositoryAdapter.update(id, ExpenseMapper.toExpense(expense));
     }
 
     @Override
     public void delete(Long id) {
-
+        expenseRepositoryAdapter.delete(id);
     }
 }
