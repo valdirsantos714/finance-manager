@@ -2,12 +2,13 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IncomeResponse } from '../../models/IncomeResponse';
 import { Observable, of } from 'rxjs';
+import { IncomeCategory } from '../../models/enums/IncomeCategory';
 
 @Injectable({
   providedIn: 'root'
 })
 export class IncomeService {
-  private baseUrl: string = 'http://localhost:8080/rendas';
+  private baseUrl: string = 'http://localhost:8080/api/incomes';
 
   constructor(private http: HttpClient) { }
 
@@ -16,23 +17,28 @@ export class IncomeService {
       id: 1,
       name: "Salário",
       description: "Salário mensal",
-      value: 5000,
-      date: "2023-10-01"
+      amount: 5000,
+      date: "2023-10-01",
+      userId: 1,
+      category: IncomeCategory.SALARY
     },
     {
       id: 2,
       name: "Renda Extra",
       description: "Venda de produtos online",
-      value: 5000,
-      date: "2023-10-01"
+      amount: 1500,
+      date: "2023-10-05",
+      userId: 1,
+      category: IncomeCategory.FREELANCE
     }
   ]
 
-  getAllIncomes(): Observable<IncomeResponse[]> {
+  /*getAllIncomes(): Observable<IncomeResponse[]> {
     return of(this.listaRendas);
-  }
+  }*/
+
   // TODO: Substituir o método acima este aqui debaixo quando o backend estiver pronto
-  getAllRendas2(): Observable<IncomeResponse[]> {
+  getAllIncomes(): Observable<IncomeResponse[]> {
     return this.http.get<IncomeResponse[]>(this.baseUrl);
   }
 

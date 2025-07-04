@@ -2,6 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { IncomeResponse } from '../../models/IncomeResponse';
 import { IncomeService } from '../../services/income-service/income.service';
+import { ListItem } from '../../models/ListItem';
+import { ItemAction } from '../../models/enums/ItemAction';
 
 @Component({
   selector: 'app-renda-dashboard',
@@ -10,7 +12,7 @@ import { IncomeService } from '../../services/income-service/income.service';
 })
 export class RendaDashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  public rendas!: IncomeResponse[];
+  public rendas!: ListItem[];
 
   constructor(private incomeService: IncomeService) { 
     // You can initialize any properties or services here if needed
@@ -24,39 +26,60 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
     this.incomeService.getAllIncomes()
     .pipe(takeUntil(this.destroy$))
     .subscribe({
-      next: (rendas: IncomeResponse[]) => {
-        this.rendas = rendas;
+      next: (incomes: IncomeResponse[]) => {
+        this.rendas = incomes.map(income => ({
+          id: income.id,
+          name: income.name,
+          description: income.description,
+          amount: income.amount,
+          date: income.date,
+          userId: income.userId,
+          category: income.category
+        }));
       },
       error: (error) => {
-        console.error('Error fetching rendas:', error);
+        console.error('Error fetching incomes:', error);
       }
     });
   }
 
-  updateIncome(idRenda: number): void {
-    this.incomeService.updateIncome(idRenda)
+  handleIncomeAction(event: { item: ListItem, action: ItemAction }): void {
+    switch (event.action) {
+      case ItemAction.Edit:
+        this.updateIncome(event.item);
+        break;
+      case ItemAction.Delete:
+        this.deleteIncome(event.item);
+        break;
+      default:
+        console.warn('Unknown action:', event.action);
+    }
+  }
+
+  updateIncome(item: ListItem): void {
+    this.incomeService.updateIncome(item.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (updatedRenda: IncomeResponse) => {
-          console.log('Renda updated successfully:', updatedRenda);
+        next: (updatedIncome: IncomeResponse) => {
+          console.log('Income updated successfully:', updatedIncome);
           this.getIncomes(); 
         },
         error: (error) => {
-          console.error('Error updating renda:', error);
+          console.error('Error updating income:', error);
         }
       });
   }
 
-  deleteIncome(idRenda: number): void {
-    this.incomeService.deleteIncome(idRenda)
+  deleteIncome(item: ListItem): void {
+    this.incomeService.deleteIncome(item.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          console.log('Renda deleted successfully');
+          console.log('Income deleted successfully');
           this.getIncomes(); 
         },
         error: (error) => {
-          console.error('Error deleting renda:', error);
+          console.error('Error deleting income:', error);
         }
       });
   }

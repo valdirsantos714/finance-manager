@@ -8,29 +8,12 @@ import { ExpenseRequest } from '../../models/ExpenseRequest';
   providedIn: 'root'
 })
 export class ExpenseService {
-  private baseUrl: string = 'http://localhost:8080/despesas';
+  private baseUrl: string = 'http://localhost:8080/api/expenses';
 
   constructor(private http: HttpClient) { }
 
-  listaExpenses: ExpenseResponse[] = [
-    {
-      id: 1,
-      name: "Aluguel",
-      description: "Pagamento mensal do aluguel",
-      value: 1500,
-      date: "2023-10-01"
-    },
-    {
-      id: 2,
-      name: "Supermercado",
-      description: "Compras mensais de supermercado",
-      value: 800,
-      date: "2023-10-05"
-    }
-  ];
-
   getAllExpenses():Observable<ExpenseResponse[]> {
-    return of(this.listaExpenses);
+    return this.http.get<ExpenseResponse[]>(this.baseUrl);
   }
 
   updateExpense(idExpense: number, updatedExpense: ExpenseRequest): Observable<ExpenseResponse> {
@@ -41,4 +24,3 @@ export class ExpenseService {
     return this.http.delete<void>(`${this.baseUrl}/${idExpense}`);
   }
 }
-
