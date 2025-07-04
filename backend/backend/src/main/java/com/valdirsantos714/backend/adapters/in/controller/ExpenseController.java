@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/expenses")
+@CrossOrigin("localhost:4200")
 public class ExpenseController {
 
     private final ExpenseServiceImpl service;

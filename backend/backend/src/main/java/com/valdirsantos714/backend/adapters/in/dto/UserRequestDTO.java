@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public record UserRequestDTO(
         @NotBlank(message = "Full name is required")
         @Size(min = 3, max = 100)
-        String fullName,
+        String name,
 
         @NotBlank(message = "Email is required")
         @Email(message = "Invalid email format")

@@ -42,7 +42,7 @@ public class ExpenseEntity {
         this.description = expense.getDescription();
         this.amount = expense.getAmount();
         this.date = expense.getDate();
-        this.user = UserMapper.toUserEntity(expense.getUser());
+        this.user = expense.getUser() != null ? UserMapper.toUserEntity(expense.getUser()) : null;
         this.category = expense.getCategory();
     }
 }

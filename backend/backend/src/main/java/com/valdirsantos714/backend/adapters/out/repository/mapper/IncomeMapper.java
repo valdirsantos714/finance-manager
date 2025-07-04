@@ -18,8 +18,14 @@ public class IncomeMapper {
         income.setDescription(incomeEntity.getDescription());
         income.setAmount(incomeEntity.getAmount());
         income.setDate(incomeEntity.getDate());
-        income.setUser(UserMapper.toUser(incomeEntity.getUser()));
         income.setCategory(incomeEntity.getCategory());
+
+        if (incomeEntity.getUser() != null) {
+            User user = new User();
+            user.setId(incomeEntity.getUser().getId());
+            income.setUser(user);
+        }
+
         return income;
     }
 

@@ -34,7 +34,7 @@ public class UserMapper {
 
     public static User toUser(UserRequestDTO userRequestDTO) {
         User user = new User();
-        user.setName(userRequestDTO.fullName());
+        user.setName(userRequestDTO.name());
         user.setEmail(userRequestDTO.email());
         user.setPassword(userRequestDTO.password());
         user.setIncomes(new ArrayList<>());
