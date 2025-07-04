@@ -1,7 +1,11 @@
+import { ExpenseCategory } from './enums/ExpenseCategory';
+
 export interface ExpenseResponse {
   id: number;
   name: string;
   description: string;
-  value: number;
-  date: string;
+  amount: number;
+  date: string;  
+  category: ExpenseCategory;
+  userId: number;
 }
