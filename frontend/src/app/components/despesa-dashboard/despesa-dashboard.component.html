@@ -1,12 +1,4 @@
 <h1>Despesa Dashboard</h1>
 <p>Gerencie suas despesas aqui.</p>
 
-@for(despesa of despesas; track despesa) {
-  <div>
-    <h2>{{ despesa.name }}</h2>
-    <p>Id: {{ despesa.id }}</p>
-    <p>Valor: {{ despesa.description }}</p>
-    <p>Data: {{ despesa.date | date }}</p>
-    <p>Categoria: {{ despesa.value }}</p>
-  </div>
-}
+<app-item-list [items]="despesas" (itemAction)="handleExpenseAction($event)"></app-item-list>

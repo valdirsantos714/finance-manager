@@ -4,10 +4,29 @@ import com.valdirsantos714.backend.adapters.in.dto.ExpenseRequestDTO;
 import com.valdirsantos714.backend.adapters.in.dto.ExpenseResponseDTO;
 import com.valdirsantos714.backend.adapters.out.repository.entity.ExpenseEntity;
 import com.valdirsantos714.backend.application.core.domain.Expense;
+import com.valdirsantos714.backend.application.core.domain.User;
 
 import java.util.List;
 
 public class ExpenseMapper {
+
+    public static ExpenseResponseDTO toResponse(Expense expense) {
+        return new ExpenseResponseDTO(
+            expense.getId(),
+            expense.getName(),
+            expense.getDescription(),
+            expense.getAmount(),
+            expense.getDate(),
+            expense.getCategory(),
+            expense.getUser() != null ? expense.getUser().getId() : null
+        );
+    }
+
+    public static List<ExpenseResponseDTO> toExpenseResponseDTOList(List<Expense> expenses) {
+        return expenses.stream()
+                .map(ExpenseMapper::toResponse)
+                .toList();
+    }
 
     public static Expense toExpense(ExpenseEntity expenseEntity) {
         Expense expense = new Expense();
@@ -16,8 +35,14 @@ public class ExpenseMapper {
         expense.setDescription(expenseEntity.getDescription());
         expense.setAmount(expenseEntity.getAmount());
         expense.setDate(expenseEntity.getDate());
-        expense.setUser(UserMapper.toUser(expenseEntity.getUser()));
         expense.setCategory(expenseEntity.getCategory());
+
+        if (expenseEntity.getUser() != null) {
+            User user = new User();
+            user.setId(expenseEntity.getUser().getId());
+            expense.setUser(user);
+        }
+
         return expense;
     }
 
@@ -33,40 +58,6 @@ public class ExpenseMapper {
         );
     }
 
-    public static ExpenseEntity toExpenseEntity(ExpenseRequestDTO request) {
-        ExpenseEntity entity = new ExpenseEntity();
-        entity.setName(request.name());
-        entity.setDescription(request.description());
-        entity.setAmount(request.amount());
-        entity.setDate(request.date());
-        entity.setCategory(request.category());
-        return entity;
-    }
-
-    public static ExpenseResponseDTO toResponse(ExpenseEntity entity) {
-        return new ExpenseResponseDTO(
-            entity.getId(),
-            entity.getName(),
-            entity.getDescription(),
-            entity.getAmount(),
-            entity.getDate(),
-            entity.getCategory(),
-            entity.getUser() != null ? entity.getUser().getId() : null
-        );
-    }
-
-    public static ExpenseResponseDTO toResponse(Expense expense) {
-        return new ExpenseResponseDTO(
-            expense.getId(),
-            expense.getName(),
-            expense.getDescription(),
-            expense.getAmount(),
-            expense.getDate(),
-            expense.getCategory(),
-            expense.getUser() != null ? expense.getUser().getId() : null
-        );
-    }
-
     public static Expense toExpense(ExpenseRequestDTO request) {
         Expense expense = new Expense();
         expense.setName(request.name());
@@ -74,13 +65,16 @@ public class ExpenseMapper {
         expense.setAmount(request.amount());
         expense.setDate(request.date());
         expense.setCategory(request.category());
+
+        User user = new User();
+        user.setId(request.userId());
         return expense;
     }
 
-    public static List<ExpenseResponseDTO> toExpenseResponseDTOList(List<Expense> expenses) {
-        return expenses.stream()
-            .map(ExpenseMapper::toResponse)
-            .toList();
+    public static Expense toExpenseWithUser(ExpenseRequestDTO request, User user) {
+        Expense expense = toExpense(request);
+        expense.setUser(user);
+        return expense;
     }
 
     public static List<ExpenseEntity> toExpenseEntityList(List<Expense> expenses) {

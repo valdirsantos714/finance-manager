@@ -1,10 +1,38 @@
-@for(item of items; track item) {
-  <div class="item">
-    <div class="item-header">
-      <h3>{{ item.name }}</h3>
-      <span class="item-status">{{ item.status }}</span>
+<div class=".item-container">
+  
+  <button mat-raised-button color="secondary" class="botao-adicionar" >
+    Adicionar Novo Item
+    <mat-icon>add</mat-icon>
+  </button>
+
+  @if (items.length === 0) {
+    <div class="empty-state">
+      <p>Nenhuma Item encontrada.</p>
     </div>
-    <p class="item-description">{{ item.description }}</p>
-    <button (click)="actionEvent.emit(item)">View Details</button>
+  }
+
+  <div class="items-container">
+    @for (item of items; track item.id) {
+      <mat-card class="item-card">
+        <mat-card-header>
+          <mat-card-title>{{ item.name }}</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <p><strong>Descrição:</strong> {{ item.description }}</p>
+          <p><strong>Valor:</strong> {{ item.amount | currency:'BRL':'symbol':'1.2-2'}}</p>
+          <p><strong>Data:</strong> {{ item.date | date:'dd/MM/yyyy' }}</p>
+        </mat-card-content>
+        
+        <mat-card-actions>
+          <button mat-icon-button color="accent" (click)="onEdit(item)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="onDelete(item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
   </div>
-}
+</div>

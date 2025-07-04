@@ -9,8 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/api/incomes")
+@CrossOrigin("localhost:4200")
 public class IncomeController {
 
     private final IncomeServiceImpl service;
@@ -22,7 +24,7 @@ public class IncomeController {
     @PostMapping
     public ResponseEntity save(@RequestBody @Valid IncomeRequestDTO dto) {
         Income income = service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(IncomeMapper.toIncome(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(IncomeMapper.toResponseDTO(income));
     }
 
     @GetMapping

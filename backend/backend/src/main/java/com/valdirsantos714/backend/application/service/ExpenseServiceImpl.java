@@ -22,8 +22,8 @@ public class ExpenseServiceImpl implements ExpenseUseCases {
 
     @Override
     public Expense save(ExpenseRequestDTO expense) {
-        userService.findById(expense.userId());
-        return expenseRepositoryAdapter.save(ExpenseMapper.toExpense(expense));
+        var user = userService.findById(expense.userId());
+        return expenseRepositoryAdapter.save(ExpenseMapper.toExpenseWithUser(expense, user));
     }
 
     @Override
