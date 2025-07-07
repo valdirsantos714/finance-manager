@@ -1,6 +1,6 @@
-package com.valdirsantos714.crenteflix.infra.security;
+package com.valdirsantos714.backend.infrastructure.security;
 
-import com.valdirsantos714.crenteflix.repositories.UsersRepository;
+import com.valdirsantos714.backend.adapters.out.repository.UserRepositoryAdapter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     private TokenService tokenService;
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepositoryAdapter usersRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

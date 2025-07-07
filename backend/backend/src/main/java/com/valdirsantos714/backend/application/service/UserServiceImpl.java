@@ -5,6 +5,7 @@ import com.valdirsantos714.backend.adapters.out.repository.UserRepositoryAdapter
 import com.valdirsantos714.backend.adapters.out.repository.mapper.UserMapper;
 import com.valdirsantos714.backend.application.core.domain.User;
 import com.valdirsantos714.backend.application.usecase.UserUseCases;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +14,19 @@ import java.util.List;
 public class UserServiceImpl implements UserUseCases {
 
     private final UserRepositoryAdapter userRepositoryAdapter;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepositoryAdapter userRepositoryAdapter) {
+    public UserServiceImpl(UserRepositoryAdapter userRepositoryAdapter, PasswordEncoder passwordEncoder) {
         this.userRepositoryAdapter = userRepositoryAdapter;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public User save(UserRequestDTO user) {
-        return userRepositoryAdapter.save(UserMapper.toUser(user));
+        String encodedPassword = passwordEncoder.encode(user.password());
+        User userToSave = UserMapper.toUser(user);
+        userToSave.setPassword(encodedPassword);
+        return userRepositoryAdapter.save(userToSave);
     }
 
     @Override

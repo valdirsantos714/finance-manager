@@ -1,5 +1,6 @@
 package com.valdirsantos714.backend.infrastructure;
 
+import com.auth0.jwt.exceptions.JWTCreationException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -9,29 +10,37 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    private static final String AUTHENTICATION_ERROR_MESSAGE = "Authentication error: ";
+    private static final String INTERNAL_SERVER_ERROR_MESSAGE = "An internal server error occurred. Please try again later.";
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity trataErro404() {
+    public ResponseEntity handleNotFoundException() {
         return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity trataErro400(MethodArgumentNotValidException e) {
-        var erros = e.getFieldErrors();
-        return ResponseEntity.badRequest().body(erros.stream().map(DadosErrosValidacao::new).toList());
+    public ResponseEntity handleBadRequestException(MethodArgumentNotValidException exception) {
+        var fieldErrors = exception.getFieldErrors();
+        return ResponseEntity.badRequest().body(fieldErrors.stream().map(ValidationErrorDetails::new).toList());
+    }
 
+    @ExceptionHandler(JWTCreationException.class)
+    public ResponseEntity handleUnauthorizedException(JWTCreationException exception) {
+        return ResponseEntity.status(401).body(new ErrorDto(AUTHENTICATION_ERROR_MESSAGE + exception.getMessage()));
     }
 
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity trataErro500(RuntimeException e) {
-        e.printStackTrace(); // Log the error for debugging purposes
-        return ResponseEntity.status(500).body("Ocorreu um erro interno no servidor. Por favor, tente novamente mais tarde.");
+    public ResponseEntity handleInternalServerError(RuntimeException exception) {
+        return ResponseEntity.status(500).body(new ErrorDto(INTERNAL_SERVER_ERROR_MESSAGE));
     }
 
-    //Record para capturar somente o campo de mensagem e o campo que faltou ser preenchido corretamente
-    private record DadosErrosValidacao(String campo, String mensagem){
-        public DadosErrosValidacao(FieldError e) {
-            this(e.getField(), e.getDefaultMessage());
+
+    private record ErrorDto(String message) {
+    }
+
+    private record ValidationErrorDetails(String field, String message) {
+        public ValidationErrorDetails(FieldError error) {
+            this(error.getField(), error.getDefaultMessage());
         }
     }
 }

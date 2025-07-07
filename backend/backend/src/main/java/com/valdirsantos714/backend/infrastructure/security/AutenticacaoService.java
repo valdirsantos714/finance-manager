@@ -1,6 +1,6 @@
-package com.valdirsantos714.crenteflix.infra.security;
+package com.valdirsantos714.backend.infrastructure.security;
 
-import com.valdirsantos714.crenteflix.repositories.UsersRepository;
+import com.valdirsantos714.backend.adapters.out.repository.UserRepositoryAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class AutenticacaoService implements UserDetailsService {
 
     @Autowired
-    private UsersRepository repository;
+    private UserRepositoryAdapter repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

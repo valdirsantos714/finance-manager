@@ -1,10 +1,11 @@
-package com.valdirsantos714.crenteflix.infra.security;
+package com.valdirsantos714.backend.infrastructure.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.valdirsantos714.crenteflix.model.security.Users;
+import com.valdirsantos714.backend.adapters.out.repository.entity.UserEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -13,18 +14,24 @@ import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
+    private static final String ISSUER = "backend";
+    private static final String TOKEN_CREATION_ERROR = "Error generating token!";
+    private static final String TOKEN_VERIFICATION_ERROR = "Error verifying token! ";
 
-    public String geraToken(Users users) {
+    @Value("${security.jwt.secret}")
+    private String jwtSecret;
+
+    public String geraToken(UserEntity user) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256("12345");
+            Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             return JWT.create()
-                    .withIssuer("crenteflix") //Nome da api
-                    .withSubject(users.getLogin()) //o login da pessoa pra quem tá gerando
+                    .withIssuer(ISSUER)
+                    .withSubject(user.getEmail())
                     .withExpiresAt(dataExpiracao())
                     .sign(algorithm);
 
         } catch (JWTCreationException exception){
-            throw new RuntimeException("Deu erro ao gerar token! ", exception);
+            throw new RuntimeException(TOKEN_CREATION_ERROR, exception);
         }
     }
 
@@ -34,15 +41,15 @@ public class TokenService {
 
     public String getSubject(String tokenJWT) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256("12345");
+            Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             return JWT.require(algorithm)
-                    .withIssuer("crenteflix")
+                    .withIssuer(ISSUER)
                     .build()
-                    .verify(tokenJWT) //Verifica o token se existe e se é válido
+                    .verify(tokenJWT)
                     .getSubject();
 
         } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Deu erro no token service ao pegar subject " + exception);
+            throw new RuntimeException(TOKEN_VERIFICATION_ERROR + exception);
         }
 
     }

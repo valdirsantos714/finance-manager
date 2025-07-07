@@ -27,6 +27,7 @@ public class UserMapper {
             user.getName(),
             user.getEmail(),
             user.getPassword(),
+            user.getRole() != null ? user.getRole() : null,
             user.getIncomes() != null ? IncomeMapper.toIncomeEntityList(user.getIncomes()) : new ArrayList<>(),
             user.getExpenses() != null ? ExpenseMapper.toExpenseEntityList(user.getExpenses()) : new ArrayList<>()
         );
