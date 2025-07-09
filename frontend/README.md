@@ -1,27 +1,63 @@
-# Frontend
+# Finance Manager
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Este é um projeto de gerenciamento financeiro que permite aos usuários controlar suas receitas e despesas. O projeto é dividido em duas partes principais: o backend (API) e o frontend (aplicação web).
 
-## Development server
+## Tecnologias Utilizadas
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### Backend
 
-## Code scaffolding
+O backend é construído com Java e Spring Boot, seguindo uma arquitetura hexagonal para garantir modularidade e manutenibilidade.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- **Java 17**: Linguagem de programação principal.
+- **Spring Boot**: Framework para facilitar o desenvolvimento de aplicações Java.
+- **Spring Security**: Para autenticação e autorização.
+- **Lombok**: Biblioteca para reduzir o código boilerplate.
+- **Bean Validation**: Para validação de dados.
+- **PostgreSQL**: Banco de dados relacional.
+- **Spring Web**: Para construção de APIs RESTful.
+- **Spring Data JPA**: Para acesso a dados com JPA.
+- **Arquitetura Hexagonal**: Padrão de arquitetura para desacoplar a lógica de negócio da infraestrutura.
 
-## Build
+### Frontend
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+O frontend é uma aplicação web moderna desenvolvida com Angular.
 
-## Running unit tests
+- **Angular 17**: Framework para construção de interfaces de usuário.
+- **TypeScript**: Superset de JavaScript que adiciona tipagem estática.
+- **Angular Material**: Biblioteca de componentes UI baseada no Material Design.
+- **RxJS**: Biblioteca para programação reativa.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Como Rodar o Projeto
 
-## Running end-to-end tests
+### Backend
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+1. Certifique-se de ter o Java 17 e o PostgreSQL instalados.
+2. Configure as credenciais do banco de dados no arquivo `application.properties` ou `application.yml` do projeto backend.
+3. Navegue até o diretório `backend` e execute a aplicação Spring Boot.
 
-## Further help
+```bash
+cd ../backend
+./mvnw spring-boot:run
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Frontend
+
+1. Certifique-se de ter o Node.js (versão 18 ou superior) e o npm (ou yarn) instalados.
+2. Certifique-se de ter o Angular CLI versão 17 instalado globalmente:
+   ```bash
+   npm install -g @angular/cli@17
+   ```
+3. Navegue até o diretório `frontend`.
+4. Instale as dependências.
+
+```bash
+npm install
+```
+
+5. Inicie o servidor de desenvolvimento.
+
+```bash
+npm start
+```
+
+A aplicação estará disponível em `http://localhost:4200`.
