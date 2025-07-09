@@ -20,17 +20,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin("localhost:4200")
+@CrossOrigin("*")
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationManager manager;
+    private final AuthenticationManager manager;
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
-    @Autowired
-    private UserServiceImpl service;
+    private final UserServiceImpl service;
+
+    public AuthenticationController(AuthenticationManager manager, TokenService tokenService, UserServiceImpl service) {
+        this.manager = manager;
+        this.tokenService = tokenService;
+        this.service = service;
+    }
 
     @Operation(summary = "Faz login do usuário",  responses = {
             @ApiResponse(description = "Requisição feita com sucesso", responseCode = "200"),
