@@ -1,0 +1,19 @@
+<div>
+    <div>
+        <h1>Register</h1>
+        <form [formGroup]="registerForm" (ngSubmit)="register()">
+            <div>
+                <label for="email">Email:</label>
+                <input id="email" formControlName="email" type="email" required />
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input id="password" formControlName="password" type="password" required />
+            </div>
+            <button type="submit" [disabled]="registerForm.invalid">Fazer Login</button>
+        </form>
+        @if (errorMessage) {
+            <div class="error-message">{{ errorMessage }}</div>
+        }
+    </div>
+</div>
