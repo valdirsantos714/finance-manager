@@ -5,6 +5,7 @@ import { RendaDashboardComponent } from './components/renda-dashboard/renda-dash
 import { DespesaDashboardComponent } from './components/despesa-dashboard/despesa-dashboard.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { authGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -22,15 +23,23 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent
+    component: DashboardComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'gerenciar-renda',
-    component: RendaDashboardComponent
+    component: RendaDashboardComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'gerenciar-despesa',
-    component: DespesaDashboardComponent
+    component: DespesaDashboardComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: '**',
+    redirectTo: '/login',
+    pathMatch: 'full'
   }
 ];
 
