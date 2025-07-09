@@ -15,7 +15,6 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
   public rendas!: ListItem[];
 
   constructor(private incomeService: IncomeService) { 
-    // You can initialize any properties or services here if needed
   }
   
   ngOnInit(): void {

@@ -5,7 +5,7 @@
     <mat-icon>add</mat-icon>
   </button>
 
-  @if (items.length === 0) {
+  @if (items && items.length === 0) {
     <div class="empty-state">
       <p>Nenhuma Item encontrada.</p>
     </div>

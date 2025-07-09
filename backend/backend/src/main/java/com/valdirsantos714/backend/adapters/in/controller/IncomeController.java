@@ -9,10 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/incomes")
-@CrossOrigin("localhost:4200")
+@CrossOrigin("*")
 public class IncomeController {
 
     private final IncomeServiceImpl service;
@@ -30,6 +31,16 @@ public class IncomeController {
     @GetMapping
     public ResponseEntity getAll() {
         return ResponseEntity.ok().body(IncomeMapper.toIncomeResponseDTOList(service.findAll()));
+    }
+
+    @GetMapping("/{userEmail}")
+    public ResponseEntity getByUserEmail(@PathVariable(name = "userEmail") String userEmail) {
+        List<Income> incomes = service.findByUserEmail(userEmail);
+        return ResponseEntity.ok().body(
+                incomes.stream()
+                        .map(IncomeMapper::toResponseDTO)
+                        .toList()
+        );
     }
 
     @PutMapping("/{id}")

@@ -4,6 +4,7 @@ import com.valdirsantos714.backend.adapters.in.dto.IncomeRequestDTO;
 import com.valdirsantos714.backend.adapters.out.repository.IncomeRepositoryAdapter;
 import com.valdirsantos714.backend.adapters.out.repository.mapper.IncomeMapper;
 import com.valdirsantos714.backend.application.core.domain.Income;
+import com.valdirsantos714.backend.application.core.domain.User;
 import com.valdirsantos714.backend.application.usecase.IncomeUseCases;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,10 @@ public class IncomeServiceImpl implements IncomeUseCases {
     @Override
     public void delete(Long id) {
         incomeRepositoryAdapter.delete(id);
+    }
+
+    @Override
+    public List<Income> findByUserEmail(String email) {
+        return incomeRepositoryAdapter.findByUserEmail(email);
     }
 }

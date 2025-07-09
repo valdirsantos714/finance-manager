@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { IncomeResponse } from '../../models/IncomeResponse';
 import { Observable, of } from 'rxjs';
 import { IncomeCategory } from '../../models/enums/IncomeCategory';
+import { JwtDecodeService } from '../jwt-decode-service/jwt-decode.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,36 +11,18 @@ import { IncomeCategory } from '../../models/enums/IncomeCategory';
 export class IncomeService {
   private baseUrl: string = 'http://localhost:8080/api/incomes';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+    private jwtDecodeService: JwtDecodeService
+  ) { }
 
-  listaRendas: IncomeResponse[] = [
-    {
-      id: 1,
-      name: "Salário",
-      description: "Salário mensal",
-      amount: 5000,
-      date: "2023-10-01",
-      userId: 1,
-      category: IncomeCategory.SALARY
-    },
-    {
-      id: 2,
-      name: "Renda Extra",
-      description: "Venda de produtos online",
-      amount: 1500,
-      date: "2023-10-05",
-      userId: 1,
-      category: IncomeCategory.FREELANCE
-    }
-  ]
-
-  /*getAllIncomes(): Observable<IncomeResponse[]> {
-    return of(this.listaRendas);
-  }*/
-
-  // TODO: Substituir o método acima este aqui debaixo quando o backend estiver pronto
   getAllIncomes(): Observable<IncomeResponse[]> {
-    return this.http.get<IncomeResponse[]>(this.baseUrl);
+    const token = this.jwtDecodeService.getTokenFromCookie();
+
+    const headers = { Authorization: `Bearer ${token}` };
+
+    const email = this.jwtDecodeService.decodeToken(token).sub;
+    
+    return this.http.get<IncomeResponse[]>(`${this.baseUrl}/${email}`, { headers });
   }
 
   updateIncome(idRenda: number): Observable<IncomeResponse> {

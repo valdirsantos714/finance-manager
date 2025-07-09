@@ -4,6 +4,7 @@ import com.valdirsantos714.backend.adapters.in.dto.ExpenseRequestDTO;
 import com.valdirsantos714.backend.adapters.out.repository.ExpenseRepositoryAdapter;
 import com.valdirsantos714.backend.adapters.out.repository.mapper.ExpenseMapper;
 import com.valdirsantos714.backend.application.core.domain.Expense;
+import com.valdirsantos714.backend.application.core.domain.User;
 import com.valdirsantos714.backend.application.usecase.ExpenseUseCases;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,16 @@ public class ExpenseServiceImpl implements ExpenseUseCases {
     @Override
     public void delete(Long id) {
         expenseRepositoryAdapter.delete(id);
+    }
+
+    @Override
+    public List<Expense> findByUserId(Long userId) {
+        User user = userService.findById(userId);
+        return user.getExpenses();
+    }
+
+    @Override
+    public List<Expense> findByUserEmail(String email) {
+        return expenseRepositoryAdapter.findByUserEmail(email);
     }
 }

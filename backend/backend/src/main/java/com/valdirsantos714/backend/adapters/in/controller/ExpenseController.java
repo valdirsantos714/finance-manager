@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/expenses")
-@CrossOrigin("localhost:4200")
+@CrossOrigin("*")
 public class ExpenseController {
 
     private final ExpenseServiceImpl service;
@@ -32,6 +32,16 @@ public class ExpenseController {
     public ResponseEntity getAllExpenses() {
         List<Expense> expenses = service.findAll();
         return ResponseEntity.ok().body(ExpenseMapper.toExpenseResponseDTOList(expenses));
+    }
+
+    @GetMapping("/{userEmail}")
+    public ResponseEntity getExpensesByUserEmail(@PathVariable(name = "userEmail") String userEmail) {
+        List<Expense> expenses = service.findByUserEmail(userEmail);
+        return ResponseEntity.ok().body(
+                expenses.stream()
+                        .map(ExpenseMapper::toResponse)
+                        .toList()
+        );
     }
 
     @PutMapping("/{id}")

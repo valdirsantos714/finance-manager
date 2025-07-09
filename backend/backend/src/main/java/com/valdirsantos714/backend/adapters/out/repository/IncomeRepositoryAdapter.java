@@ -56,6 +56,12 @@ public class IncomeRepositoryAdapter implements IncomeRepository {
         incomeJpaRepository.deleteById(id);
     }
 
+    @Override
+    public List<Income> findByUserEmail(String email) {
+        List<IncomeEntity> entities = incomeJpaRepository.findByUserEmail(email);
+        return entities.stream().map(IncomeMapper::toIncome).toList();
+    }
+
     private IncomeEntity updateIncomeEntity(IncomeEntity entity, Income income) {
         entity.setName(income.getName());
         entity.setDescription(income.getDescription());

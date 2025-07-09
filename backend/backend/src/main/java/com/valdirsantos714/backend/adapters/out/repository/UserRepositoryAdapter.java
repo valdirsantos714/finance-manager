@@ -7,6 +7,7 @@ import com.valdirsantos714.backend.adapters.out.repository.mapper.UserMapper;
 import com.valdirsantos714.backend.application.core.domain.User;
 import com.valdirsantos714.backend.application.ports.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -54,6 +55,12 @@ public class UserRepositoryAdapter implements UserRepository {
     @Override
     public void delete(Long id) {
         userJpaRepository.deleteById(id);
+    }
+
+    @Override
+    public UserDetails findByEmail(String email) {
+        return userJpaRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
     }
 
     private UserEntity updateUserEntity(UserEntity entity, User user) {

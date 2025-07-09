@@ -1,5 +1,7 @@
 package com.valdirsantos714.backend.application.core.domain;
 
+import com.valdirsantos714.backend.application.core.domain.enums.UserRole;
+
 import java.util.List;
 
 public class User {
@@ -9,6 +11,7 @@ public class User {
     private String password;
     private List<Income> incomes;
     private List<Expense> expenses;
+    private UserRole role;
 
     public Long getId() {
         return id;
@@ -56,5 +59,13 @@ public class User {
 
     public void setExpenses(List<Expense> expenses) {
         this.expenses = expenses;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }
