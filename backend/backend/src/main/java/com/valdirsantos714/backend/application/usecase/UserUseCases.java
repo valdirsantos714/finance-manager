@@ -9,6 +9,7 @@ public interface UserUseCases {
     User save(UserRequestDTO User);
     List<User> findAll();
     User findById(Long id);
+    User findByEmail(String email);
     User update(Long id, UserRequestDTO User);
     void delete(Long id);
 }

@@ -33,9 +33,9 @@ public class IncomeController {
         return ResponseEntity.ok().body(IncomeMapper.toIncomeResponseDTOList(service.findAll()));
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity getByUserId(@PathVariable(name = "userId") Long userId) {
-        List<Income> incomes = service.findByUserId(userId);
+    @GetMapping("/{userEmail}")
+    public ResponseEntity getByUserEmail(@PathVariable(name = "userEmail") String userEmail) {
+        List<Income> incomes = service.findByUserEmail(userEmail);
         return ResponseEntity.ok().body(
                 incomes.stream()
                         .map(IncomeMapper::toResponseDTO)

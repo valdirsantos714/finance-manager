@@ -12,4 +12,5 @@ public interface ExpenseUseCases {
     Expense update(Long id, ExpenseRequestDTO expense);
     void delete(Long id);
     List<Expense> findByUserId(Long userId);
+    List<Expense> findByUserEmail(String email);
 }

@@ -55,6 +55,12 @@ public class ExpenseRepositoryAdapter implements ExpenseRepository {
         expenseJpaRepository.deleteById(id);
     }
 
+    @Override
+    public List<Expense> findByUserEmail(String email) {
+        List<ExpenseEntity> entities = expenseJpaRepository.findByUserEmail(email);
+        return entities.stream().map(ExpenseMapper::toExpense).toList();
+    }
+
     private ExpenseEntity updateExpenseEntity(ExpenseEntity entity, Expense expense) {
         entity.setName(expense.getName());
         entity.setDescription(expense.getDescription());

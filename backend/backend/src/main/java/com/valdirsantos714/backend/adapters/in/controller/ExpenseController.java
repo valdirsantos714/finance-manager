@@ -34,12 +34,14 @@ public class ExpenseController {
         return ResponseEntity.ok().body(ExpenseMapper.toExpenseResponseDTOList(expenses));
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity getExpenseByUserId(@PathVariable(name = "userId") Long userId) {
-        List<Expense> expenses = service.findByUserId(userId);
-        return ResponseEntity.ok().body(expenses.stream()
-                .map(ExpenseMapper::toResponse)
-                .toList());
+    @GetMapping("/{userEmail}")
+    public ResponseEntity getExpensesByUserEmail(@PathVariable(name = "userEmail") String userEmail) {
+        List<Expense> expenses = service.findByUserEmail(userEmail);
+        return ResponseEntity.ok().body(
+                expenses.stream()
+                        .map(ExpenseMapper::toResponse)
+                        .toList()
+        );
     }
 
     @PutMapping("/{id}")

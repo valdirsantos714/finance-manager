@@ -10,4 +10,5 @@ public interface IncomeRepository {
     Income findById(Long id);
     Income update(Long id, Income Income);
     void delete(Long id);
+    List<Income> findByUserEmail(String email);
 }

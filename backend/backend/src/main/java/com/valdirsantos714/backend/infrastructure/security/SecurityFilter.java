@@ -28,7 +28,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if (tokenJWT != null) {
             var subject = tokenService.getSubject(tokenJWT); //Pega o token e verifica se tem um usuário com aquele token cadastrado no banco
-            var usuario = usersRepository.findByLogin(subject); //Ver se aquele email existe no banco de dados e carrega o usuário
+            var usuario = usersRepository.findByEmail(subject); //Ver se aquele email existe no banco de dados e carrega o usuário
 
             if (usuario != null) {
                 var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());

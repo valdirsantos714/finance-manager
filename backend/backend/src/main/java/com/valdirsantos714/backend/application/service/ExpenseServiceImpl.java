@@ -52,4 +52,9 @@ public class ExpenseServiceImpl implements ExpenseUseCases {
         User user = userService.findById(userId);
         return user.getExpenses();
     }
+
+    @Override
+    public List<Expense> findByUserEmail(String email) {
+        return expenseRepositoryAdapter.findByUserEmail(email);
+    }
 }

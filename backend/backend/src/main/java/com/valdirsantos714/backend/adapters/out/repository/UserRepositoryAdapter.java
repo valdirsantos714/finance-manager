@@ -58,9 +58,9 @@ public class UserRepositoryAdapter implements UserRepository {
     }
 
     @Override
-    public UserDetails findByLogin(String username) {
-        return userJpaRepository.findByEmail(username)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + username));
+    public UserDetails findByEmail(String email) {
+        return userJpaRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
     }
 
     private UserEntity updateUserEntity(UserEntity entity, User user) {

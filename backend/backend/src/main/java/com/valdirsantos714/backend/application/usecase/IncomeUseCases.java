@@ -11,5 +11,5 @@ public interface IncomeUseCases {
     Income findById(Long id);
     Income update(Long id, IncomeRequestDTO Income);
     void delete(Long id);
-    List<Income> findByUserId(Long userId);
+    List<Income> findByUserEmail(String email);
 }

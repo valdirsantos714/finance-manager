@@ -4,6 +4,7 @@ import com.valdirsantos714.backend.adapters.in.dto.UserRequestDTO;
 import com.valdirsantos714.backend.adapters.in.dto.UserResponseDTO;
 import com.valdirsantos714.backend.adapters.out.repository.entity.UserEntity;
 import com.valdirsantos714.backend.application.core.domain.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,13 @@ public class UserMapper {
         user.setPassword(userEntity.getPassword());
         user.setIncomes(IncomeMapper.toIncomeList(userEntity.getIncomes()));
         user.setExpenses(ExpenseMapper.toExpenseList(userEntity.getExpenses()));
+        return user;
+    }
+
+    public static User toUser(UserDetails userDetails) {
+        User user = new User();
+        user.setEmail(userDetails.getUsername());
+        user.setPassword(userDetails.getPassword());
         return user;
     }
 

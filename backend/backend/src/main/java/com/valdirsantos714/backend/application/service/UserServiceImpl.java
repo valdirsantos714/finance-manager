@@ -40,6 +40,11 @@ public class UserServiceImpl implements UserUseCases {
     }
 
     @Override
+    public User findByEmail(String email) {
+        return UserMapper.toUser(userRepositoryAdapter.findByEmail(email));
+    }
+
+    @Override
     public User update(Long id, UserRequestDTO User) {
         return userRepositoryAdapter.update(id, UserMapper.toUser(User));
     }

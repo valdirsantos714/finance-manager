@@ -48,8 +48,7 @@ public class IncomeServiceImpl implements IncomeUseCases {
     }
 
     @Override
-    public List<Income> findByUserId(Long userId) {
-        User user = userService.findById(userId);
-        return user.getIncomes();
+    public List<Income> findByUserEmail(String email) {
+        return incomeRepositoryAdapter.findByUserEmail(email);
     }
 }

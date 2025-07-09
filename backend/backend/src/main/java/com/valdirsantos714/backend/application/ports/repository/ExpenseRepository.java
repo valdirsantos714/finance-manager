@@ -10,4 +10,5 @@ public interface ExpenseRepository {
     Expense findById(Long id);
     Expense update(Long id, Expense expense);
     void delete(Long id);
+    List<Expense> findByUserEmail(String email);
 }
