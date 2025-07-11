@@ -3,6 +3,7 @@ package com.valdirsantos714.backend.adapters.out.repository.mapper;
 import com.valdirsantos714.backend.adapters.in.dto.IncomeRequestDTO;
 import com.valdirsantos714.backend.adapters.in.dto.IncomeResponseDTO;
 import com.valdirsantos714.backend.adapters.out.repository.entity.IncomeEntity;
+import com.valdirsantos714.backend.adapters.out.repository.entity.UserEntity;
 import com.valdirsantos714.backend.application.core.domain.Income;
 import com.valdirsantos714.backend.application.core.domain.User;
 import com.valdirsantos714.backend.application.core.domain.enums.IncomeCategory;
@@ -23,53 +24,45 @@ public class IncomeMapper {
         if (incomeEntity.getUser() != null) {
             User user = new User();
             user.setId(incomeEntity.getUser().getId());
+            user.setEmail(incomeEntity.getUser().getEmail());
             income.setUser(user);
         }
 
         return income;
     }
 
-    public static IncomeEntity toIncomeEntity(Income income) {
-        return new IncomeEntity(
-            income.getId(),
-            income.getName(),
-            income.getDescription(),
-            income.getAmount(),
-            income.getDate(),
-            income.getUser() != null ? UserMapper.toUserEntity(income.getUser()) : null,
-            income.getCategory()
-        );
-    }
-
-    public static Income toIncome(IncomeRequestDTO request) {
+    public static Income toIncome(IncomeRequestDTO dto) {
         Income income = new Income();
-        income.setName(request.name());
-        income.setDescription(request.description());
-        income.setAmount(request.amount());
-        income.setDate(request.date());
-        income.setCategory(IncomeCategory.valueOf(request.category().toUpperCase()));
-
-        // Criar um User temporário apenas com o ID
-        User user = new User();
-        user.setId(request.userId());
-        income.setUser(user);
-
+        income.setName(dto.name());
+        income.setDescription(dto.description());
+        income.setAmount(dto.amount());
+        income.setDate(dto.date());
+        income.setCategory(IncomeCategory.valueOf(dto.category()));
         return income;
     }
 
-    public static IncomeRequestDTO toRequestDTO(Income income) {
-        return new IncomeRequestDTO(
-            income.getName(),
-            income.getDescription(),
-            income.getAmount(),
-            income.getDate(),
-            income.getUser().getId(),
-            income.getCategory().name()
-        );
+    public static IncomeEntity toIncomeEntity(Income income) {
+        IncomeEntity entity = new IncomeEntity();
+        entity.setId(income.getId());
+        entity.setName(income.getName());
+        entity.setDescription(income.getDescription());
+        entity.setAmount(income.getAmount());
+        entity.setDate(income.getDate());
+        entity.setCategory(income.getCategory());
+
+        if (income.getUser() != null) {
+            UserEntity userEntity = new UserEntity();
+            userEntity.setId(income.getUser().getId());
+            userEntity.setEmail(income.getUser().getEmail());
+            entity.setUser(userEntity);
+        }
+
+        return entity;
     }
 
-    public static List<IncomeResponseDTO> toIncomeResponseDTOList(List<Income> incomeList) {
-        return incomeList.stream().map(IncomeMapper::toResponseDTO)
+    public static List<IncomeResponseDTO> toIncomeResponseDTOList(List<Income> incomes) {
+        return incomes.stream()
+                .map(IncomeMapper::toResponseDTO)
                 .toList();
     }
 
