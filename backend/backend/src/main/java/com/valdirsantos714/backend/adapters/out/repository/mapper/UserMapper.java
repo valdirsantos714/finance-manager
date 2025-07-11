@@ -41,6 +41,13 @@ public class UserMapper {
         );
     }
 
+    public static UserEntity toUserEntity(UserDetails user) {
+        return new User(
+                user.getUsername(),
+                user.getPassword()
+        );
+    }
+
     public static User toUser(UserRequestDTO userRequestDTO) {
         User user = new User();
         user.setName(userRequestDTO.name());

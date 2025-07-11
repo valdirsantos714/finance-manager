@@ -4,7 +4,6 @@ import com.valdirsantos714.backend.adapters.in.dto.ExpenseRequestDTO;
 import com.valdirsantos714.backend.adapters.out.repository.ExpenseRepositoryAdapter;
 import com.valdirsantos714.backend.adapters.out.repository.mapper.ExpenseMapper;
 import com.valdirsantos714.backend.application.core.domain.Expense;
-import com.valdirsantos714.backend.application.core.domain.User;
 import com.valdirsantos714.backend.application.usecase.ExpenseUseCases;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +13,15 @@ import java.util.List;
 public class ExpenseServiceImpl implements ExpenseUseCases {
 
     private final ExpenseRepositoryAdapter expenseRepositoryAdapter;
-    private final UserServiceImpl userService;
 
-    public ExpenseServiceImpl(ExpenseRepositoryAdapter expenseRepositoryAdapter, UserServiceImpl userService) {
+    public ExpenseServiceImpl(ExpenseRepositoryAdapter expenseRepositoryAdapter) {
         this.expenseRepositoryAdapter = expenseRepositoryAdapter;
-        this.userService = userService;
     }
 
     @Override
-    public Expense save(ExpenseRequestDTO expense) {
-        var user = userService.findById(expense.userId());
-        return expenseRepositoryAdapter.save(ExpenseMapper.toExpenseWithUser(expense, user));
+    public Expense save(String email, ExpenseRequestDTO expense) {
+        Expense expenseToSave = ExpenseMapper.toExpense(expense);
+        return expenseRepositoryAdapter.save(email, expenseToSave);
     }
 
     @Override
@@ -33,24 +30,14 @@ public class ExpenseServiceImpl implements ExpenseUseCases {
     }
 
     @Override
-    public Expense findById(Long id) {
-        return expenseRepositoryAdapter.findById(id);
+    public Expense update(Long id, String email, ExpenseRequestDTO expense) {
+        Expense expenseToUpdate = ExpenseMapper.toExpense(expense);
+        return expenseRepositoryAdapter.update(id, email, expenseToUpdate);
     }
 
     @Override
-    public Expense update(Long id, ExpenseRequestDTO expense) {
-        return expenseRepositoryAdapter.update(id, ExpenseMapper.toExpense(expense));
-    }
-
-    @Override
-    public void delete(Long id) {
-        expenseRepositoryAdapter.delete(id);
-    }
-
-    @Override
-    public List<Expense> findByUserId(Long userId) {
-        User user = userService.findById(userId);
-        return user.getExpenses();
+    public void delete(String email, Long id) {
+        expenseRepositoryAdapter.delete(email, id);
     }
 
     @Override

@@ -1,7 +1,10 @@
 package com.valdirsantos714.backend.adapters.in.dto;
 
 import com.valdirsantos714.backend.application.core.domain.enums.ExpenseCategory;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 import java.time.LocalDate;
 
 public record ExpenseRequestDTO(
@@ -18,8 +21,5 @@ public record ExpenseRequestDTO(
     LocalDate date,
 
     @NotNull(message = "Category is required")
-    ExpenseCategory category,
-
-    @NotNull(message = "User ID is required")
-    Long userId
+    ExpenseCategory category
 ) {}

@@ -22,9 +22,9 @@ public class ExpenseController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity createExpense(@RequestBody @Valid ExpenseRequestDTO expenseRequestDTO) {
-        Expense expense = service.save(expenseRequestDTO);
+    @PostMapping("/{userEmail}")
+    public ResponseEntity createExpense(@PathVariable String userEmail, @RequestBody @Valid ExpenseRequestDTO expenseRequestDTO) {
+        Expense expense = service.save(userEmail, expenseRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(ExpenseMapper.toResponse(expense));
     }
 
@@ -44,15 +44,18 @@ public class ExpenseController {
         );
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity updateExpense(@PathVariable Long id, @RequestBody @Valid ExpenseRequestDTO expenseRequestDTO) {
-        Expense updatedExpense = service.update(id, expenseRequestDTO);
+    @PutMapping("/{userEmail}/{id}")
+    public ResponseEntity updateExpense(
+            @PathVariable String userEmail,
+            @PathVariable Long id,
+            @RequestBody @Valid ExpenseRequestDTO expenseRequestDTO) {
+        Expense updatedExpense = service.update(id, userEmail, expenseRequestDTO);
         return ResponseEntity.ok().body(ExpenseMapper.toResponse(updatedExpense));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteExpense(@PathVariable Long id) {
-        service.delete(id);
+    @DeleteMapping("/{userEmail}/{id}")
+    public ResponseEntity deleteExpense(@PathVariable String userEmail, @PathVariable Long id) {
+        service.delete(userEmail, id);
         return ResponseEntity.noContent().build();
     }
 

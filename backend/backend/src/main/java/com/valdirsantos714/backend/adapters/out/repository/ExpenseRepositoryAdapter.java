@@ -1,8 +1,8 @@
 package com.valdirsantos714.backend.adapters.out.repository;
 
 import com.valdirsantos714.backend.adapters.out.repository.entity.ExpenseEntity;
+import com.valdirsantos714.backend.adapters.out.repository.entity.UserEntity;
 import com.valdirsantos714.backend.adapters.out.repository.mapper.ExpenseMapper;
-import com.valdirsantos714.backend.adapters.out.repository.mapper.UserMapper;
 import com.valdirsantos714.backend.application.core.domain.Expense;
 import com.valdirsantos714.backend.application.ports.repository.ExpenseRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,17 +14,21 @@ import java.util.List;
 public class ExpenseRepositoryAdapter implements ExpenseRepository {
 
     private final ExpenseJpaRepository expenseJpaRepository;
-    private final String ENTITY_NOT_FOUND_MESSAGE = "Expense not found with id: ";
+    private final UserJpaRepository userJpaRepository;
+    private final String ENTITY_NOT_FOUND_MESSAGE = "Expense not found for email: ";
+    private final String USER_NOT_FOUND_MESSAGE = "User not found for email: ";
 
-    public ExpenseRepositoryAdapter(ExpenseJpaRepository expenseJpaRepository) {
+    public ExpenseRepositoryAdapter(ExpenseJpaRepository expenseJpaRepository, UserJpaRepository userJpaRepository) {
         this.expenseJpaRepository = expenseJpaRepository;
+        this.userJpaRepository = userJpaRepository;
     }
 
     @Override
-    public Expense save(Expense expense) {
-        ExpenseEntity entity = new ExpenseEntity(expense);
-        expenseJpaRepository.save(entity);
-        return ExpenseMapper.toExpense(entity);
+    public Expense save(String email, Expense expense) {
+        UserEntity userEntity = getUserByEmail(email);
+        ExpenseEntity expenseEntity = ExpenseMapper.toExpenseEntity(expense);
+        expenseEntity.setUser(userEntity);
+        return ExpenseMapper.toExpense(expenseJpaRepository.save(expenseEntity));
     }
 
     @Override
@@ -34,25 +38,25 @@ public class ExpenseRepositoryAdapter implements ExpenseRepository {
     }
 
     @Override
-    public Expense findById(Long id) {
-        return expenseJpaRepository.findById(id)
-                .map(ExpenseMapper::toExpense)
-                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
+    public Expense update(Long id, String email, Expense expense) {
+        UserEntity userEntity = getUserByEmail(email);
+        ExpenseEntity existingEntity = expenseJpaRepository.findByUserEmailAndId(email, id)
+            .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + email));
+
+        // Atualiza os campos mantendo o ID e usuário originais
+        existingEntity.setName(expense.getName());
+        existingEntity.setDescription(expense.getDescription());
+        existingEntity.setAmount(expense.getAmount());
+        existingEntity.setDate(expense.getDate());
+        existingEntity.setCategory(expense.getCategory());
+        existingEntity.setUser(userEntity);
+
+        return ExpenseMapper.toExpense(expenseJpaRepository.save(existingEntity));
     }
 
     @Override
-    public Expense update(Long id, Expense expense) {
-        ExpenseEntity entity = expenseJpaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + id));
-
-        entity = updateExpenseEntity(entity, expense);
-        expenseJpaRepository.save(entity);
-        return ExpenseMapper.toExpense(entity);
-    }
-
-    @Override
-    public void delete(Long id) {
-        expenseJpaRepository.deleteById(id);
+    public void delete(String email, Long id) {
+        expenseJpaRepository.deleteByUserEmailAndId(email, id);
     }
 
     @Override
@@ -61,14 +65,9 @@ public class ExpenseRepositoryAdapter implements ExpenseRepository {
         return entities.stream().map(ExpenseMapper::toExpense).toList();
     }
 
-    private ExpenseEntity updateExpenseEntity(ExpenseEntity entity, Expense expense) {
-        entity.setName(expense.getName());
-        entity.setDescription(expense.getDescription());
-        entity.setAmount(expense.getAmount());
-        entity.setDate(expense.getDate());
-        entity.setCategory(expense.getCategory());
-        entity.setUser(UserMapper.toUserEntity(expense.getUser()));
-
-        return entity;
+    private UserEntity getUserByEmail(String email) {
+        return userJpaRepository.findByEmail(email)
+            .map(user -> (UserEntity) user)
+            .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE + email));
     }
 }
