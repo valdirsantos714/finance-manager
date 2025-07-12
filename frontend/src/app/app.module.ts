@@ -9,6 +9,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
+import { ItemModalModule } from './components/shared/item-modal/item-modal.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { LoginComponent } from './components/login/login.component';
     BrowserModule,
     AppRoutingModule,
     SharedModule,
+    ItemModalModule, 
   ],
   providers: [
     provideClientHydration(),

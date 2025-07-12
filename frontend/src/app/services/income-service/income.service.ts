@@ -20,6 +20,12 @@ export class IncomeService {
     return this.http.get<IncomeResponse[]>(`${this.baseUrl}/${email}`, { headers });
   }
 
+  createIncome(income: IncomeRequest): Observable<IncomeResponse> {
+    const { email, headers } = this.jwtService.getEmailAndHeaders();  
+    
+    return this.http.post<IncomeResponse>(`${this.baseUrl}/${email}`, income, { headers });
+  }
+
   updateIncome(idRenda: number, updatedIncome: IncomeRequest): Observable<IncomeResponse> {
     const { email, headers } = this.jwtService.getEmailAndHeaders();
 

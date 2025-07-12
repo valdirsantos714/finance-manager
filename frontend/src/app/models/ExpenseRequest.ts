@@ -5,5 +5,5 @@ export interface ExpenseRequest {
   description?: string;
   amount: number;
   date: string;
-  expenseCategory: ExpenseCategory;
+  category: ExpenseCategory;
 }

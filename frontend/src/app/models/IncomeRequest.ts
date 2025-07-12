@@ -5,5 +5,5 @@ export interface IncomeRequest {
   description?: string;
   amount: number;
   date: string;
-  expenseCategory: IncomeCategory;
+  category: IncomeCategory;
 }

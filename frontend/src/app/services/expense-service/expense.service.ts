@@ -22,6 +22,12 @@ export class ExpenseService {
     return this.http.get<ExpenseResponse[]>(`${this.baseUrl}/${email}`, { headers });
   }
 
+  createExpense(expense: ExpenseRequest): Observable<ExpenseResponse> {
+    const { email, headers } = this.jwtService.getEmailAndHeaders();
+
+    return this.http.post<ExpenseResponse>(`${this.baseUrl}/${email}`, expense, { headers });
+  }
+
   updateExpense(idExpense: number, updatedExpense: ExpenseRequest): Observable<ExpenseResponse> {
     const { email, headers } = this.jwtService.getEmailAndHeaders();
 

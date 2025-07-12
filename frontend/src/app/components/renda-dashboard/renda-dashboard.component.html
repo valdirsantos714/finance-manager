@@ -1,4 +1,9 @@
-<h1>Renda Dashboard</h1>
-<p>Gerencie suas rendas aqui.</p>
-
-<app-item-list [items]="rendas" (itemAction)="handleIncomeAction($event)"></app-item-list>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Renda Dashboard</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>Gerencie suas rendas aqui.</p>
+    <app-item-list [items]="rendas" [type]="'income'" (itemAction)="handleIncomeAction($event)"></app-item-list>
+  </mat-card-content>
+</mat-card>

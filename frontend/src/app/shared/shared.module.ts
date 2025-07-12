@@ -36,7 +36,7 @@ import { ItemListComponent } from '../components/shared/item-list/item-list.comp
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    MatSnackBarModule,
+    MatSnackBarModule
   ],
   exports: [
     RendaDashboardComponent,
