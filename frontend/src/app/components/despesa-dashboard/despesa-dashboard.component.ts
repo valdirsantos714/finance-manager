@@ -5,6 +5,7 @@ import { ExpenseService } from '../../services/expense-service/expense.service';
 import { ExpenseRequest } from '../../models/ExpenseRequest';
 import { ListItem } from '../../models/ListItem';
 import { ItemAction } from '../../models/enums/ItemAction';
+import { ExpenseCategory } from '../../models/enums/ExpenseCategory';
 
 @Component({
   selector: 'app-despesa-dashboard',
@@ -44,11 +45,11 @@ export class DespesaDashboardComponent implements OnInit, OnDestroy {
 
   handleExpenseAction(event: { item: ListItem, action: ItemAction }): void {
     switch (event.action) {
-      case ItemAction.Edit:
+      case ItemAction.Update:
         this.updateExpense(event.item);
         break;
       case ItemAction.Delete:
-        this.deleteExpense(event.item);
+        this.deleteExpense(event.item.id);
         break;
       default:
         console.warn('Unknown action:', event.action);
@@ -56,14 +57,18 @@ export class DespesaDashboardComponent implements OnInit, OnDestroy {
   }
 
   updateExpense(item: ListItem): void {
-    // You might need to fetch the full ExpenseRequest or create one from ListItem
-    // For now, assuming you only need the ID for update/delete
-    this.expenseService.updateExpense(item.id, {} as ExpenseRequest) // Placeholder for ExpenseRequest
+    this.expenseService.updateExpense(item.id, {
+      name: item.name,
+      description: item.description,
+      amount: item.amount,
+      date: item.date,
+      expenseCategory: String(item.category?.toUpperCase()) as ExpenseCategory
+    }) 
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (updatedExpenseResponse: ExpenseResponse) => {
           console.log('Expense updated successfully:', updatedExpenseResponse);
-          this.getExpenses(); // Refresh the list after update
+          this.getExpenses();
         },
         error: (error) => {
           console.error('Error updating expense:', error);
@@ -71,13 +76,13 @@ export class DespesaDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  deleteExpense(item: ListItem): void {
-    this.expenseService.deleteExpense(item.id)
+  deleteExpense(id: number): void {
+    this.expenseService.deleteExpense(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           console.log('Expense deleted successfully');
-          this.getExpenses(); // Refresh the list after deletion
+          this.getExpenses();
         },
         error: (error) => {
           console.error('Error deleting expense:', error);

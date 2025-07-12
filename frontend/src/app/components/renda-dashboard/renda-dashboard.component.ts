@@ -4,6 +4,7 @@ import { IncomeResponse } from '../../models/IncomeResponse';
 import { IncomeService } from '../../services/income-service/income.service';
 import { ListItem } from '../../models/ListItem';
 import { ItemAction } from '../../models/enums/ItemAction';
+import { IncomeCategory } from '../../models/enums/IncomeCategory';
 
 @Component({
   selector: 'app-renda-dashboard',
@@ -44,11 +45,11 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
 
   handleIncomeAction(event: { item: ListItem, action: ItemAction }): void {
     switch (event.action) {
-      case ItemAction.Edit:
+      case ItemAction.Update:
         this.updateIncome(event.item);
         break;
       case ItemAction.Delete:
-        this.deleteIncome(event.item);
+        this.deleteIncome(event.item.id);
         break;
       default:
         console.warn('Unknown action:', event.action);
@@ -56,7 +57,13 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
   }
 
   updateIncome(item: ListItem): void {
-    this.incomeService.updateIncome(item.id)
+    this.incomeService.updateIncome(item.id, {
+      name: item.name,
+      description: item.description,
+      amount: item.amount,
+      date: item.date,
+      expenseCategory: String(item.category?.toUpperCase()) as IncomeCategory
+    })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (updatedIncome: IncomeResponse) => {
@@ -69,8 +76,8 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  deleteIncome(item: ListItem): void {
-    this.incomeService.deleteIncome(item.id)
+  deleteIncome(id: number): void {
+    this.incomeService.deleteIncome(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {

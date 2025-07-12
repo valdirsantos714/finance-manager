@@ -1,4 +1,4 @@
 export enum ItemAction {
-  Edit = 'edit',
+  Update = 'update',
   Delete = 'delete'
 }

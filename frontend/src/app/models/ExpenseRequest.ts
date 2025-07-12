@@ -1,6 +1,9 @@
+import { ExpenseCategory } from "./enums/ExpenseCategory";
+
 export interface ExpenseRequest {
   name: string;
-  description: string;
-  value: number;
+  description?: string;
+  amount: number;
   date: string;
+  expenseCategory: ExpenseCategory;
 }

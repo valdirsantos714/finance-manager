@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 @Injectable({
   providedIn: 'root'
 })
-export class JwtDecodeService {
+export class JwtService {
 
   constructor() { }
 
