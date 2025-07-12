@@ -1,25 +1,43 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ListItem } from '../../../models/ListItem';
 import { ItemAction } from '../../../models/enums/ItemAction';
+import { MatDialog } from '@angular/material/dialog';
+import { ItemModalComponent } from '../item-modal/item-modal.component';
 
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
   styleUrl: './item-list.component.css'
 })
-export class ItemListComponent implements OnInit {
+export class ItemListComponent {
   @Input() items!: ListItem[];
+  @Input() type!: 'income' | 'expense';
   @Output() itemAction = new EventEmitter<{ item: ListItem, action: ItemAction }>();
 
-  ngOnInit(): void {
-    // No initialization needed for this component currently
-  }
+  constructor(private dialog: MatDialog) {}
 
   onEdit(item: ListItem): void {
-    this.itemAction.emit({ item, action: ItemAction.Edit });
+    this.openItemModal(item);
   }
 
   onDelete(item: ListItem): void {
     this.itemAction.emit({ item, action: ItemAction.Delete });
+  }
+
+  onAddItem(): void {
+    this.openItemModal(null);
+  }
+
+  private openItemModal(item: ListItem | null): void {
+    const dialogRef = this.dialog.open(ItemModalComponent, {
+      width: '400px',
+      data: item
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.itemAction.emit({ item: result, action: item ? ItemAction.Update : ItemAction.Create });
+      }
+    });
   }
 }
