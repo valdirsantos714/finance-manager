@@ -43,7 +43,7 @@ public class IncomeRepositoryAdapter implements IncomeRepository {
         UserEntity userEntity = userJpaRepository.findUserEntityByEmail(email)
             .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE + email));
 
-        IncomeEntity existingEntity = incomeJpaRepository.findByUserEmailAndId(email, income.getId())
+        IncomeEntity existingEntity = incomeJpaRepository.findByUserEmailAndId(email, id)
             .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MESSAGE + email));
 
         // Atualiza os campos mantendo o ID e usuário originais
