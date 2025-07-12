@@ -23,4 +23,26 @@ export class JwtService {
     }
     return '';
   }
+
+  getEmailFromToken(): string {
+    const token = this.getTokenFromCookie();
+
+    const decodedToken: any = this.decodeToken(token);
+    
+    return token !== '' ? decodedToken.sub : '';
+  }
+
+  createHeaders(): { Authorization: string } {
+    const token = this.getTokenFromCookie();
+
+    return { Authorization: `Bearer ${token}` };
+  }
+
+  getEmailAndHeaders(): { email: string, headers: { Authorization: string } } {
+    const email = this.getEmailFromToken();
+
+    const headers = this.createHeaders();
+
+    return { email, headers };
+  }
 }

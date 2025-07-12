@@ -17,20 +17,20 @@ export class ExpenseService {
   ) { }
 
   getAllExpenses():Observable<ExpenseResponse[]> {
-    const token = this.jwtService.getTokenFromCookie();
-
-    const headers = { Authorization: `Bearer ${token}` };
-
-    const email = this.jwtService.decodeToken(token).sub;
+    const { email, headers } = this.jwtService.getEmailAndHeaders();
 
     return this.http.get<ExpenseResponse[]>(`${this.baseUrl}/${email}`, { headers });
   }
 
   updateExpense(idExpense: number, updatedExpense: ExpenseRequest): Observable<ExpenseResponse> {
-    return this.http.put<ExpenseResponse>(`${this.baseUrl}/${idExpense}`, updatedExpense);
+    const { email, headers } = this.jwtService.getEmailAndHeaders();
+
+    return this.http.put<ExpenseResponse>(`${this.baseUrl}/${email}/${idExpense}`, updatedExpense, { headers });
   }
 
   deleteExpense(idExpense: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${idExpense}`);
+    const { email, headers } = this.jwtService.getEmailAndHeaders();
+
+    return this.http.delete<void>(`${this.baseUrl}/${email}/${idExpense}`, { headers });
   }
 }

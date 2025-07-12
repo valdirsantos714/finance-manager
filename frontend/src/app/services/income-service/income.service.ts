@@ -2,7 +2,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IncomeResponse } from '../../models/IncomeResponse';
 import { Observable, of } from 'rxjs';
-import { IncomeCategory } from '../../models/enums/IncomeCategory';
 import { JwtService } from '../jwt-service/jwt.service';
 import { IncomeRequest } from '../../models/IncomeRequest';
 @Injectable({
@@ -16,21 +15,21 @@ export class IncomeService {
   ) { }
 
   getAllIncomes(): Observable<IncomeResponse[]> {
-    const token = this.jwtService.getTokenFromCookie();
-
-    const headers = { Authorization: `Bearer ${token}` };
-
-    const email = this.jwtService.decodeToken(token).sub;
+    const { email, headers } = this.jwtService.getEmailAndHeaders();
     
     return this.http.get<IncomeResponse[]>(`${this.baseUrl}/${email}`, { headers });
   }
 
   updateIncome(idRenda: number, updatedIncome: IncomeRequest): Observable<IncomeResponse> {
-    return this.http.put<IncomeResponse>(`${this.baseUrl}/${idRenda}`, updatedIncome);
+    const { email, headers } = this.jwtService.getEmailAndHeaders();
+
+    return this.http.put<IncomeResponse>(`${this.baseUrl}/${email}/${idRenda}`, updatedIncome, { headers });
   }
 
   deleteIncome(idRenda: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${idRenda}`);
+    const { email, headers } = this.jwtService.getEmailAndHeaders();
+
+    return this.http.delete<void>(`${this.baseUrl}/${email}/${idRenda}`, { headers });
   }
 
 }
