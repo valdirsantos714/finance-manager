@@ -50,10 +50,10 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
   handleIncomeAction(event: { item: ListItem, action: ItemAction }): void {
     switch (event.action) {
       case ItemAction.Create:
-        this.createIncome(event.item);
+        this.getIncomes();
         break;
       case ItemAction.Update:
-        this.updateIncome(event.item);
+        this.getIncomes();
         break;
       case ItemAction.Delete:
         this.deleteIncome(event.item.id);

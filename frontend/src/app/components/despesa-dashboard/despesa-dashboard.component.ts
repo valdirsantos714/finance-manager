@@ -51,57 +51,29 @@ export class DespesaDashboardComponent implements OnInit, OnDestroy {
   handleExpenseAction(event: { item: ListItem, action: ItemAction }): void {
     switch (event.action) {
       case ItemAction.Create:
-        this.createExpense(event.item);
+        this.getExpenses();
         break;
       case ItemAction.Update:
-        this.updateExpense(event.item);
+        this.getExpenses();
         break;
       case ItemAction.Delete:
         this.deleteExpense(event.item.id);
         break;
-      default:
-        console.warn('Unknown action:', event.action);
+      
     }
   }
 
-  createExpense(item: ListItem): void {
-    this.expenseService.createExpense({
-      name: item.name,
-      description: item.description,
-      amount: item.amount,
-      date: item.date,
-      category: String(item.category?.toUpperCase()) as ExpenseCategory
-    })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (createdExpenseResponse: ExpenseResponse) => {
-          console.log('Expense created successfully:', createdExpenseResponse);
-          this.getExpenses();
-        },
-        error: (error) => {
-          console.error('Error creating expense:', error);
-        }
-      });
-  }
+  openExpenseModal(item: ListItem | null): void {
+    const dialogRef = this.dialog.open(ItemModalComponent, {
+      width: '500px',
+      data: item
+    });
 
-  updateExpense(item: ListItem): void {
-    this.expenseService.updateExpense(item.id, {
-      name: item.name,
-      description: item.description,
-      amount: item.amount,
-      date: item.date,
-      category: String(item.category?.toUpperCase()) as ExpenseCategory
-    })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (updatedExpenseResponse: ExpenseResponse) => {
-          console.log('Expense updated successfully:', updatedExpenseResponse);
-          this.getExpenses();
-        },
-        error: (error) => {
-          console.error('Error updating expense:', error);
-        }
-      });
+    dialogRef.afterClosed().pipe(takeUntil(this.destroy$)).subscribe(result => {
+      if (result) {
+        this.getExpenses();
+      }
+    });
   }
 
   deleteExpense(id: number): void {

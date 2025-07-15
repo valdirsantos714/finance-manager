@@ -13,6 +13,7 @@ import { ExpenseResponse } from '../../../models/ExpenseResponse';
 import { IncomeCategory } from '../../../models/enums/IncomeCategory';
 import { ExpenseCategory } from '../../../models/enums/ExpenseCategory';
 import { ListItem } from '../../../models/ListItem';
+import { get } from 'node:http';
 
 type ItemType = 'income' | 'expense';
 type ItemRequest = IncomeRequest | ExpenseRequest;
@@ -108,11 +109,9 @@ export class ItemModalComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe({
             next: () => {
-              console.log('id: ',this.itemForm.value.id);
-              
+              console.log('Income updated successfully');
+              this.getAllIncomes();
               this.dialogRef.close(item);
-              this.incomeService.getAllIncomes()
-                .pipe(takeUntil(this.destroy$))
             },
             error: (error) => {
               console.log('id: ',this.itemForm.value.id);
@@ -123,10 +122,14 @@ export class ItemModalComponent implements OnInit, OnDestroy {
         this.expenseService.updateExpense(this.itemForm.get('id')?.value, updatedItem)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
-            next: () => this.dialogRef.close(item),
+            next: () => {
+              this.dialogRef.close(item)
+              console.log('Expense updated successfully');
+              this.getAllExpenses();
+            },
             error: (error: any) => {
               console.error('Error updating expense:', error);
-              alert('Error updating expense: ' + (error.error?.message || error.message || 'Unknown error'));
+              
             }
           });
       }
@@ -135,24 +138,56 @@ export class ItemModalComponent implements OnInit, OnDestroy {
         this.incomeService.createIncome(item as IncomeRequest)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
-            next: () => this.dialogRef.close(item),
+            next: () => {
+              this.dialogRef.close(item);
+              this.getAllIncomes();
+              console.log('Income created successfully');
+            },
             error: (error: any) => {
               console.error('Error creating income:', error);
-              alert('Error creating income: ' + (error.error?.message || error.message || 'Check console for more info'));
             }
           });
       } else {
         this.expenseService.createExpense(item as ExpenseRequest)
           .pipe(takeUntil(this.destroy$))
           .subscribe({
-            next: () => this.dialogRef.close(item),
+            next: () => {
+              this.dialogRef.close(item)
+              this.getAllExpenses();
+            },
             error: (error: any) => {
               console.error('Error creating expense:', error);
-              alert('Error creating expense: ' + (error.error?.message || error.message || 'Check console for more info'));
             }
           });
       }
     }
+  }
+
+  private getAllIncomes(): void {
+    this.incomeService.getAllIncomes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (incomes: IncomeResponse[]) => {
+          console.log('Incomes fetched successfully:', incomes);
+        },
+        error: (error) => {
+          console.error('Error fetching incomes:', error);
+        }
+      });
+
+  }
+
+  private getAllExpenses(): void {
+    this.expenseService.getAllExpenses()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (expenses: ExpenseResponse[]) => {
+          console.log('Expenses fetched successfully:', expenses);
+        },
+        error: (error) => {
+          console.error('Error fetching expenses:', error);
+        }
+      });
   }
 
   close(): void {
