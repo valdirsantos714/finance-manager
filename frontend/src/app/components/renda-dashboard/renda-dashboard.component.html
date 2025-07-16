@@ -4,6 +4,6 @@
   </mat-card-header>
   <mat-card-content>
     <p>Gerencie suas rendas aqui.</p>
-    <app-item-list [items]="rendas" [type]="'income'" (itemAction)="handleIncomeAction($event)"></app-item-list>
+    <app-item-list [items]="rendas" [itemType]="'income'" (itemAction)="handleIncomeAction($event)"></app-item-list>
   </mat-card-content>
 </mat-card>

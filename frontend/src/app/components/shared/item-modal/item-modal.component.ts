@@ -97,12 +97,13 @@ export class ItemModalComponent implements OnInit, OnDestroy {
         this.updateIncome(item as IncomeRequest);
       }
       this.updateExpense(item as ExpenseRequest);
+    } else {
+      if (this.itemType === 'income') {
+        this.createIncome(item as IncomeRequest);
+      } else { 
+        this.createExpense(item as ExpenseRequest);
+      }
     }
-    if (this.itemType === 'income') {
-      this.createIncome(item as IncomeRequest);
-    } 
-    this.createExpense(item as ExpenseRequest);
-    
   }
 
   private updateIncome(item: IncomeRequest): void {
