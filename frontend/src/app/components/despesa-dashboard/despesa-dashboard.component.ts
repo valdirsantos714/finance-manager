@@ -2,10 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ExpenseResponse } from '../../models/ExpenseResponse';
 import { Subject, takeUntil } from 'rxjs';
 import { ExpenseService } from '../../services/expense-service/expense.service';
-import { ExpenseRequest } from '../../models/ExpenseRequest';
 import { ListItem } from '../../models/ListItem';
 import { ItemAction } from '../../models/enums/ItemAction';
-import { ExpenseCategory } from '../../models/enums/ExpenseCategory';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemModalComponent } from '../shared/item-modal/item-modal.component';
 

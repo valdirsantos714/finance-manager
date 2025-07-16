@@ -4,9 +4,6 @@ import { IncomeResponse } from '../../models/IncomeResponse';
 import { IncomeService } from '../../services/income-service/income.service';
 import { ListItem } from '../../models/ListItem';
 import { ItemAction } from '../../models/enums/ItemAction';
-import { IncomeCategory } from '../../models/enums/IncomeCategory';
-import { MatDialog } from '@angular/material/dialog';
-import { ItemModalComponent } from '../shared/item-modal/item-modal.component';
 
 @Component({
   selector: 'app-renda-dashboard',
@@ -19,7 +16,6 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private incomeService: IncomeService,
-    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -61,46 +57,6 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
       default:
         console.warn('Unknown action:', event.action);
     }
-  }
-
-  createIncome(item: ListItem): void {
-    this.incomeService.createIncome({
-      name: item.name,
-      description: item.description,
-      amount: item.amount,
-      date: item.date,
-      category: String(item.category?.toUpperCase()) as IncomeCategory
-    })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (createdIncome: IncomeResponse) => {
-          console.log('Income created successfully:', createdIncome);
-          this.getIncomes();
-        },
-        error: (error) => {
-          console.error('Error creating income:', error);
-        }
-      });
-  }
-
-  updateIncome(item: ListItem): void {
-    this.incomeService.updateIncome(item.id, {
-      name: item.name,
-      description: item.description,
-      amount: item.amount,
-      date: item.date,
-      category: String(item.category?.toUpperCase()) as IncomeCategory
-    })
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (updatedIncome: IncomeResponse) => {
-          console.log('Income updated successfully:', updatedIncome);
-          this.getIncomes();
-        },
-        error: (error) => {
-          console.error('Error updating income:', error);
-        }
-      });
   }
 
   deleteIncome(id: number): void {

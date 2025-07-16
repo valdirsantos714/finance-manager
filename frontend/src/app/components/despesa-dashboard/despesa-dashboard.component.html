@@ -4,6 +4,6 @@
   </mat-card-header>
   <mat-card-content>
     <p>Gerencie suas despesas aqui.</p>
-    <app-item-list [items]="despesas" [type]="'expense'" (itemAction)="handleExpenseAction($event)"></app-item-list>
+    <app-item-list [items]="despesas" [itemType]="'expense'" (itemAction)="handleExpenseAction($event)"></app-item-list>
   </mat-card-content>
 </mat-card>

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ExpenseResponse } from '../../models/ExpenseResponse';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { ExpenseRequest } from '../../models/ExpenseRequest';
 import { JwtService } from '../jwt-service/jwt.service';
 
