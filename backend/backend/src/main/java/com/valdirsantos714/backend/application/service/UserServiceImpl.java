@@ -53,4 +53,9 @@ public class UserServiceImpl implements UserUseCases {
     public void delete(Long id) {
         userRepositoryAdapter.delete(id);
     }
+
+    @Override
+    public String findNameByEmail(String email) {
+        return userRepositoryAdapter.findNameByEmail(email);
+    }
 }

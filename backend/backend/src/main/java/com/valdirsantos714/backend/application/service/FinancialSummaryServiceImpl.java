@@ -22,12 +22,12 @@ public class FinancialSummaryServiceImpl implements FinancialSummaryUseCases {
 
     @Override
     public FinancialSummaryResponseDTO getFinancialSummary(String email) {
-        var user = userService.findByEmail(email);
-        var totalExpenses = expenseRepository.sumExpensesByUserEmail(email);
-        var totalIncomes = incomeRepository.sumIncomesByUserEmail(email);
+        String name = userService.findNameByEmail(email);
+        Double totalExpenses = expenseRepository.sumExpensesByUserEmail(email);
+        Double totalIncomes = incomeRepository.sumIncomesByUserEmail(email);
 
         return new FinancialSummaryResponseDTO(
-                user.getName(),
+                name,
                 totalIncomes,
                 totalExpenses
         );

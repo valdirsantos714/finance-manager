@@ -63,6 +63,11 @@ public class UserRepositoryAdapter implements UserRepository {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
     }
 
+    @Override
+    public String findNameByEmail(String email) {
+        return userJpaRepository.findNameByEmail(email);
+    }
+
     private UserEntity updateUserEntity(UserEntity entity, User user) {
         entity.setName(user.getName());
         entity.setEmail(user.getEmail());

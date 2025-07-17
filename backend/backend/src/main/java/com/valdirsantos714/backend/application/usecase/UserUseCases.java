@@ -12,4 +12,5 @@ public interface UserUseCases {
     User findByEmail(String email);
     User update(Long id, UserRequestDTO User);
     void delete(Long id);
+    String findNameByEmail(String email);
 }
