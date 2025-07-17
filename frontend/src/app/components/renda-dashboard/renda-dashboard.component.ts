@@ -14,68 +14,58 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   public rendas!: ListItem[];
 
-  constructor(private incomeService: IncomeService) { 
-  }
-  
+  constructor(
+    private readonly incomeService: IncomeService
+  ) { }
+
   ngOnInit(): void {
     this.getIncomes();
   }
 
   getIncomes(): void {
     this.incomeService.getAllIncomes()
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (incomes: IncomeResponse[]) => {
-        this.rendas = incomes.map(income => ({
-          id: income.id,
-          name: income.name,
-          description: income.description,
-          amount: income.amount,
-          date: income.date,
-          userId: income.userId,
-          category: income.category
-        }));
-      },
-      error: (error) => {
-        console.error('Error fetching incomes:', error);
-      }
-    });
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (incomes: IncomeResponse[]) => {
+          this.rendas = incomes.map(income => ({
+            id: income.id,
+            name: income.name,
+            description: income.description,
+            amount: income.amount,
+            date: income.date,
+            userId: income.userId,
+            category: income.category
+          }));
+        },
+        error: (error) => {
+          console.error('Error fetching incomes:', error);
+        }
+      });
   }
 
   handleIncomeAction(event: { item: ListItem, action: ItemAction }): void {
     switch (event.action) {
-      case ItemAction.Edit:
-        this.updateIncome(event.item);
+      case ItemAction.Create:
+        this.getIncomes();
+        break;
+      case ItemAction.Update:
+        this.getIncomes();
         break;
       case ItemAction.Delete:
-        this.deleteIncome(event.item);
+        this.deleteIncome(event.item.id);
         break;
       default:
         console.warn('Unknown action:', event.action);
     }
   }
 
-  updateIncome(item: ListItem): void {
-    this.incomeService.updateIncome(item.id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (updatedIncome: IncomeResponse) => {
-          console.log('Income updated successfully:', updatedIncome);
-          this.getIncomes(); 
-        },
-        error: (error) => {
-          console.error('Error updating income:', error);
-        }
-      });
-  }
-
-  deleteIncome(item: ListItem): void {
-    this.incomeService.deleteIncome(item.id)
+  deleteIncome(id: number): void {
+    this.incomeService.deleteIncome(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           console.log('Income deleted successfully');
-          this.getIncomes(); 
+          this.getIncomes();
         },
         error: (error) => {
           console.error('Error deleting income:', error);
@@ -83,7 +73,6 @@ export class RendaDashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

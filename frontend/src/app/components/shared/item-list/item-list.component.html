@@ -1,19 +1,18 @@
-<div class=".item-container">
-  
-  <button mat-raised-button color="secondary" class="botao-adicionar" >
+<div class="item-container">
+  <button mat-raised-button color="primary" class="botao-adicionar" (click)="onAddItem()">
     Adicionar Novo Item
     <mat-icon>add</mat-icon>
   </button>
 
   @if (items && items.length === 0) {
     <div class="empty-state">
-      <p>Nenhuma Item encontrada.</p>
+      <p>Nenhum item encontrado.</p>
     </div>
   }
 
   <div class="items-container">
     @for (item of items; track item.id) {
-      <mat-card class="item-card">
+      <mat-card class="item-card" color="primary">
         <mat-card-header>
           <mat-card-title>{{ item.name }}</mat-card-title>
         </mat-card-header>

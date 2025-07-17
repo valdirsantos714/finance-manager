@@ -22,9 +22,9 @@ public class IncomeController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity save(@RequestBody @Valid IncomeRequestDTO dto) {
-        Income income = service.save(dto);
+    @PostMapping("/{email}")
+    public ResponseEntity save(@PathVariable String email, @RequestBody @Valid IncomeRequestDTO dto) {
+        Income income = service.save(email, dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(IncomeMapper.toResponseDTO(income));
     }
 
@@ -33,9 +33,9 @@ public class IncomeController {
         return ResponseEntity.ok().body(IncomeMapper.toIncomeResponseDTOList(service.findAll()));
     }
 
-    @GetMapping("/{userEmail}")
-    public ResponseEntity getByUserEmail(@PathVariable(name = "userEmail") String userEmail) {
-        List<Income> incomes = service.findByUserEmail(userEmail);
+    @GetMapping("/{email}")
+    public ResponseEntity getByUserEmail(@PathVariable String email) {
+        List<Income> incomes = service.findByUserEmail(email);
         return ResponseEntity.ok().body(
                 incomes.stream()
                         .map(IncomeMapper::toResponseDTO)
@@ -43,15 +43,18 @@ public class IncomeController {
         );
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody @Valid IncomeRequestDTO dto) {
-        Income income = service.update(id, dto);
+    @PutMapping("/{email}/{id}")
+    public ResponseEntity update(
+            @PathVariable String email,
+            @PathVariable Long id,
+            @RequestBody @Valid IncomeRequestDTO dto) {
+        Income income = service.update(id, email, dto);
         return ResponseEntity.ok().body(IncomeMapper.toResponseDTO(income));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id) {
-        service.delete(id);
+    @DeleteMapping("/{email}/{id}")
+    public ResponseEntity delete(@PathVariable String email, @PathVariable Long id) {
+        service.delete(email, id);
         return ResponseEntity.noContent().build();
     }
 }

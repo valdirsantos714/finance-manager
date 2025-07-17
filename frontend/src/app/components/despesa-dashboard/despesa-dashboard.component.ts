@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ExpenseResponse } from '../../models/ExpenseResponse';
 import { Subject, takeUntil } from 'rxjs';
 import { ExpenseService } from '../../services/expense-service/expense.service';
-import { ExpenseRequest } from '../../models/ExpenseRequest';
 import { ListItem } from '../../models/ListItem';
 import { ItemAction } from '../../models/enums/ItemAction';
+import { MatDialog } from '@angular/material/dialog';
+import { ItemModalComponent } from '../shared/item-modal/item-modal.component';
 
 @Component({
   selector: 'app-despesa-dashboard',
@@ -15,7 +16,10 @@ export class DespesaDashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   public despesas!: ListItem[];
 
-  constructor(private expenseService: ExpenseService ) { }
+  constructor(
+    private expenseService: ExpenseService,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.getExpenses();
@@ -44,51 +48,48 @@ export class DespesaDashboardComponent implements OnInit, OnDestroy {
 
   handleExpenseAction(event: { item: ListItem, action: ItemAction }): void {
     switch (event.action) {
-      case ItemAction.Edit:
-        this.updateExpense(event.item);
+      case ItemAction.Create:
+        this.getExpenses();
+        break;
+      case ItemAction.Update:
+        this.getExpenses();
         break;
       case ItemAction.Delete:
-        this.deleteExpense(event.item);
+        this.deleteExpense(event.item.id);
         break;
-      default:
-        console.warn('Unknown action:', event.action);
+      
     }
   }
 
-  updateExpense(item: ListItem): void {
-    // You might need to fetch the full ExpenseRequest or create one from ListItem
-    // For now, assuming you only need the ID for update/delete
-    this.expenseService.updateExpense(item.id, {} as ExpenseRequest) // Placeholder for ExpenseRequest
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (updatedExpenseResponse: ExpenseResponse) => {
-          console.log('Expense updated successfully:', updatedExpenseResponse);
-          this.getExpenses(); // Refresh the list after update
-        },
-        error: (error) => {
-          console.error('Error updating expense:', error);
-        }
-      });
+  openExpenseModal(item: ListItem | null): void {
+    const dialogRef = this.dialog.open(ItemModalComponent, {
+      width: '500px',
+      data: item
+    });
+
+    dialogRef.afterClosed().pipe(takeUntil(this.destroy$)).subscribe(result => {
+      if (result) {
+        this.getExpenses();
+      }
+    });
   }
 
-  deleteExpense(item: ListItem): void {
-    this.expenseService.deleteExpense(item.id)
+  deleteExpense(id: number): void {
+    this.expenseService.deleteExpense(id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
           console.log('Expense deleted successfully');
-          this.getExpenses(); // Refresh the list after deletion
+          this.getExpenses();
         },
         error: (error) => {
           console.error('Error deleting expense:', error);
         }
       });
-    }
-
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
 }

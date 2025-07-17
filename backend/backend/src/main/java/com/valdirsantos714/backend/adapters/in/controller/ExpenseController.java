@@ -22,9 +22,9 @@ public class ExpenseController {
         this.service = service;
     }
 
-    @PostMapping
-    public ResponseEntity createExpense(@RequestBody @Valid ExpenseRequestDTO expenseRequestDTO) {
-        Expense expense = service.save(expenseRequestDTO);
+    @PostMapping("/{email}")
+    public ResponseEntity createExpense(@PathVariable String email, @RequestBody @Valid ExpenseRequestDTO expenseRequestDTO) {
+        Expense expense = service.save(email, expenseRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(ExpenseMapper.toResponse(expense));
     }
 
@@ -34,9 +34,9 @@ public class ExpenseController {
         return ResponseEntity.ok().body(ExpenseMapper.toExpenseResponseDTOList(expenses));
     }
 
-    @GetMapping("/{userEmail}")
-    public ResponseEntity getExpensesByUserEmail(@PathVariable(name = "userEmail") String userEmail) {
-        List<Expense> expenses = service.findByUserEmail(userEmail);
+    @GetMapping("/{email}")
+    public ResponseEntity getExpensesByUserEmail(@PathVariable String email) {
+        List<Expense> expenses = service.findByUserEmail(email);
         return ResponseEntity.ok().body(
                 expenses.stream()
                         .map(ExpenseMapper::toResponse)
@@ -44,15 +44,18 @@ public class ExpenseController {
         );
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity updateExpense(@PathVariable Long id, @RequestBody @Valid ExpenseRequestDTO expenseRequestDTO) {
-        Expense updatedExpense = service.update(id, expenseRequestDTO);
+    @PutMapping("/{email}/{id}")
+    public ResponseEntity updateExpense(
+            @PathVariable String email,
+            @PathVariable Long id,
+            @RequestBody @Valid ExpenseRequestDTO expenseRequestDTO) {
+        Expense updatedExpense = service.update(id, email, expenseRequestDTO);
         return ResponseEntity.ok().body(ExpenseMapper.toResponse(updatedExpense));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteExpense(@PathVariable Long id) {
-        service.delete(id);
+    @DeleteMapping("/{email}/{id}")
+    public ResponseEntity deleteExpense(@PathVariable String email, @PathVariable Long id) {
+        service.delete(email, id);
         return ResponseEntity.noContent().build();
     }
 

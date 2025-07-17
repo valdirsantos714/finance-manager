@@ -6,10 +6,9 @@ import com.valdirsantos714.backend.application.core.domain.Income;
 import java.util.List;
 
 public interface IncomeUseCases {
-    Income save(IncomeRequestDTO Income);
+    Income save(String email, IncomeRequestDTO income);
     List<Income> findAll();
-    Income findById(Long id);
-    Income update(Long id, IncomeRequestDTO Income);
-    void delete(Long id);
+    Income update(Long id, String email, IncomeRequestDTO income);
+    void delete(String email, Long id);
     List<Income> findByUserEmail(String email);
 }

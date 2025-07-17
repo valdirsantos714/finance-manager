@@ -1,5 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+import { FinancialService } from '../../services/financial-service/financial.service';
+import { FinancialSummary } from '../../models/FinancialSummary';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,13 +10,35 @@ import { Router } from '@angular/router';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<void>();
+  public financialSummary!: FinancialSummary;
 
-  constructor(private router: Router) {
-  }
+  constructor(
+    private router: Router,
+    private readonly financialService: FinancialService
+  ) { }
 
   ngOnInit(): void {
-    // Code to run when the component is initialized
-    console.log('DashboardComponent initialized');
+    this.getFinancialSummary();
+  }
+
+  getFinancialSummary() {
+    this.financialService.getFinancialSummary()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (summary: FinancialSummary) => {
+          this.financialSummary = {
+            name: summary.name,
+            totalIncome: summary.totalIncome,
+            totalExpenses: summary.totalExpenses,
+            balance: summary.balance
+          };
+          console.log('Financial Summary:', this.financialSummary);
+        },
+        error: (error) => {
+          console.error('Error fetching financial summary:', error);
+        }
+      });
   }
 
   gerenciarRenda(): void {
@@ -26,8 +51,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Cleanup logic can go here
-    console.log('DashboardComponent destroyed');
+    this.destroy$.next();
+    this.destroy$.complete();
   }
-
 }

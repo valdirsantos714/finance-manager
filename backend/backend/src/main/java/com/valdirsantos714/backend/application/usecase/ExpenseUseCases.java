@@ -6,11 +6,9 @@ import com.valdirsantos714.backend.application.core.domain.Expense;
 import java.util.List;
 
 public interface ExpenseUseCases {
-    Expense save(ExpenseRequestDTO expense);
+    Expense save(String email, ExpenseRequestDTO expense);
     List<Expense> findAll();
-    Expense findById(Long id);
-    Expense update(Long id, ExpenseRequestDTO expense);
-    void delete(Long id);
-    List<Expense> findByUserId(Long userId);
+    Expense update(Long id, String email, ExpenseRequestDTO expense);
+    void delete(String email, Long id);
     List<Expense> findByUserEmail(String email);
 }

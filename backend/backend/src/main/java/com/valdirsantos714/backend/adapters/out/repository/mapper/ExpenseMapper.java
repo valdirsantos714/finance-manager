@@ -40,6 +40,7 @@ public class ExpenseMapper {
         if (expenseEntity.getUser() != null) {
             User user = new User();
             user.setId(expenseEntity.getUser().getId());
+            user.setEmail(expenseEntity.getUser().getEmail());
             expense.setUser(user);
         }
 
@@ -58,22 +59,13 @@ public class ExpenseMapper {
         );
     }
 
-    public static Expense toExpense(ExpenseRequestDTO request) {
+    public static Expense toExpense(ExpenseRequestDTO dto) {
         Expense expense = new Expense();
-        expense.setName(request.name());
-        expense.setDescription(request.description());
-        expense.setAmount(request.amount());
-        expense.setDate(request.date());
-        expense.setCategory(request.category());
-
-        User user = new User();
-        user.setId(request.userId());
-        return expense;
-    }
-
-    public static Expense toExpenseWithUser(ExpenseRequestDTO request, User user) {
-        Expense expense = toExpense(request);
-        expense.setUser(user);
+        expense.setName(dto.name());
+        expense.setDescription(dto.description());
+        expense.setAmount(dto.amount());
+        expense.setDate(dto.date());
+        expense.setCategory(dto.category());
         return expense;
     }
 

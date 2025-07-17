@@ -5,10 +5,9 @@ import com.valdirsantos714.backend.application.core.domain.Expense;
 import java.util.List;
 
 public interface ExpenseRepository {
-    Expense save(Expense expense);
+    Expense save(String email, Expense expense);
     List<Expense> findAll();
-    Expense findById(Long id);
-    Expense update(Long id, Expense expense);
-    void delete(Long id);
+    Expense update(Long id, String email, Expense expense);
+    void delete(String email, Long id);
     List<Expense> findByUserEmail(String email);
 }

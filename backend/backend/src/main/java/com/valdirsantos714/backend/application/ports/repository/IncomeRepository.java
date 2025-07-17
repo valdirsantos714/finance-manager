@@ -5,10 +5,9 @@ import com.valdirsantos714.backend.application.core.domain.Income;
 import java.util.List;
 
 public interface IncomeRepository {
-    Income save(Income Income);
+    Income save(String email, Income income);
     List<Income> findAll();
-    Income findById(Long id);
-    Income update(Long id, Income Income);
-    void delete(Long id);
+    Income update(Long id, String email, Income income);
+    void delete(String email, Long id);
     List<Income> findByUserEmail(String email);
 }
