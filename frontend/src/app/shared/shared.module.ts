@@ -1,5 +1,6 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule, LOCALE_ID } from '@angular/core';
+import { CommonModule, registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
 
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -12,9 +13,12 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
 import { RendaDashboardComponent } from '../components/renda-dashboard/renda-dashboard.component';
 import { DespesaDashboardComponent } from '../components/despesa-dashboard/despesa-dashboard.component';
 import { ItemListComponent } from '../components/shared/item-list/item-list.component';
+
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
@@ -36,7 +40,8 @@ import { ItemListComponent } from '../components/shared/item-list/item-list.comp
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatListModule
   ],
   exports: [
     RendaDashboardComponent,
@@ -54,12 +59,14 @@ import { ItemListComponent } from '../components/shared/item-list/item-list.comp
     MatIconModule,
     MatCardModule,
     MatSnackBarModule,
+    MatListModule,
     ItemListComponent
   ],
   providers: [
     { provide: MatDialogRef, useValue: {} },
     { provide: MAT_DIALOG_DATA, useValue: {} },
-    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    { provide: LOCALE_ID, useValue: 'pt' }
   ]
 })
 export class SharedModule { }

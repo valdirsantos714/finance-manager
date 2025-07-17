@@ -32,8 +32,10 @@ export class ItemListComponent {
 
   private openItemModal(item: ListItem | null): void {
     const dialogRef = this.dialog.open(ItemModalComponent, {
-      width: '400px',
-      data: { item, itemType: this.itemType }
+      data: { item, itemType: this.itemType },
+      width: '60%',
+      height: '90%',
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe(result => {

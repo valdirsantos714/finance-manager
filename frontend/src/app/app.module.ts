@@ -22,7 +22,7 @@ import { ItemModalModule } from './components/shared/item-modal/item-modal.modul
     BrowserModule,
     AppRoutingModule,
     SharedModule,
-    ItemModalModule, 
+    ItemModalModule,
   ],
   providers: [
     provideClientHydration(),

@@ -1,0 +1,29 @@
+mat-card {
+  margin: 1rem auto; /* Centraliza o card horizontalmente e adiciona margem superior/inferior */
+  text-align: center;
+  max-width: 90%; /* Limita a largura máxima do card */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil */
+}
+
+mat-card-header {
+  background-color: var(--mdc-filled-button-container-color); /* Usa a cor primária do tema */
+  display: flex;
+  justify-content: center;
+  font-size: 3rem;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+mat-card-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+mat-card-content {
+  font-size: 1.5rem;
+}
+
+mat-card-content p {
+  color: #555;
+  margin-bottom: 1.5rem;
+}

@@ -1,0 +1,78 @@
+.item-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centraliza o container principal */
+  width: 100%;
+}
+
+.botao-adicionar {
+  margin-bottom: 20px;
+}
+
+.empty-state {
+  text-align: center;
+  color: #757575;
+  margin-top: 20px;
+}
+
+.items-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+  justify-content: center; /* Centraliza os itens horizontalmente */
+  align-items: flex-start; /* Alinha os itens ao topo quando há muitos */
+  gap: 20px; /* Espaçamento entre os itens */
+  width: 100%;
+  max-width: 1200px; /* Limita a largura para evitar que se espalhem demais */
+  padding: 0 10px; /* Adiciona um pouco de padding nas laterais */
+}
+
+.item-card {
+  flex: 1 1 calc(33% - 40px); /* 3 itens por linha, considerando o gap */
+  max-width: calc(33% - 40px);
+  min-width: 280px; /* Largura mínima para os cards */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto; /* Ajusta a altura automaticamente */
+}
+
+.item-card mat-card-title {
+  font-size: 1.2em; /* Aumenta o tamanho da fonte do título do item */
+  font-weight: bold;
+}
+
+mat-card {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+mat-car-title {
+  font-size: 3rem;
+  font-weight: bold;
+
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  gap: 10px; /* Espaçamento entre os botões */
+}
+
+@media (max-width: 900px) {
+  .item-card {
+    flex: 1 1 calc(50% - 30px); /* 2 itens por linha em telas menores */
+    max-width: calc(50% - 30px);
+  }
+}
+
+@media (max-width: 600px) {
+  .item-card {
+    flex: 1 1 100%; /* 1 item por linha em telas muito pequenas */
+    max-width: 100%;
+  }
+}

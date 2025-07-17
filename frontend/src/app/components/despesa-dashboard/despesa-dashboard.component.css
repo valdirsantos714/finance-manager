@@ -1,0 +1,27 @@
+mat-card {
+  margin: 20px auto; /* Centraliza o card horizontalmente e adiciona margem superior/inferior */
+  max-width: 90%; /* Limita a largura máxima do card */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra sutil */
+}
+
+mat-card-header {
+  background-color: var(--mdc-filled-button-container-color); 
+  color: white;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+mat-card-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-align: center;
+}
+
+mat-card-content {
+  padding: 20px;
+}
+
+mat-card-content p {
+  color: #555;
+  margin-bottom: 15px;
+}

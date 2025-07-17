@@ -1,12 +1,24 @@
-<div>
-    <h1>Seja bem vindo(a)</h1>
-    <p>Esta é a página inicial do seu dashboard.</p>
-    
-    <button (click)="gerenciarRenda()">
-        Gerenciar Renda
-    </button>
+<div class="dashboard-container">
+  <mat-card class="dashboard-card" color="primary">
+    <mat-card-header>
+      <mat-card-title>Bem vindo {{ financialSummary.name }} ao Dashboard principal do Finance Manager!</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>Gerencie suas finanças aqui.</p>
+      <mat-list class="summary-details">
+        <mat-list-item><strong>Total de Despesas:</strong> {{ financialSummary.totalExpenses | currency:'BRL':'symbol':'1.2-2':'pt' }}</mat-list-item>
+        <mat-list-item><strong>Total de Rendas:</strong> {{ financialSummary.totalIncome | currency:'BRL':'symbol':'1.2-2':'pt' }}</mat-list-item>
+        <mat-list-item><strong>Saldo:</strong> <span [class.positive-balance]="financialSummary.balance >= 0" [class.negative-balance]="financialSummary.balance < 0">{{ financialSummary.balance | currency:'BRL':'symbol':'1.2-2':'pt' }}</span></mat-list-item>
+      </mat-list>
+    </mat-card-content>
 
-    <button (click)="gerenciarDespesa()">
-        Gerenciar Despesa
-    </button>
+    <mat-card-actions class="dashboard-actions">
+      <button mat-raised-button color="primary" (click)="gerenciarRenda()">
+          Gerenciar Renda
+      </button>
+      <button mat-raised-button color="accent" (click)="gerenciarDespesa()">
+          Gerenciar Despesa
+      </button>
+    </mat-card-actions>
+  </mat-card>
 </div>
