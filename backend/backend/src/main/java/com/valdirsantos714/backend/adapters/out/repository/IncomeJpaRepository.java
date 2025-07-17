@@ -23,4 +23,7 @@ public interface IncomeJpaRepository extends JpaRepository<IncomeEntity, Long> {
     @Transactional
     @Query("DELETE FROM IncomeEntity i WHERE i.user.email = :email AND i.id = :id")
     void deleteByUserEmailAndId(@Param("email") String email, @Param("id") Long id);
+
+    @Query("SELECT COALESCE(SUM(i.amount), 0.0) FROM IncomeEntity i WHERE i.user.email = :email")
+    Double sumIncomesByUserEmail(@Param("email") String email);
 }

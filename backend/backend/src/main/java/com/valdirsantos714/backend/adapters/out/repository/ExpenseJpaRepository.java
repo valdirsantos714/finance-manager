@@ -23,4 +23,7 @@ public interface ExpenseJpaRepository extends JpaRepository<ExpenseEntity, Long>
     @Transactional
     @Query("DELETE FROM ExpenseEntity e WHERE e.user.email = :email AND e.id = :id")
     void deleteByUserEmailAndId(@Param("email") String email, @Param("id") Long id);
+
+    @Query("SELECT COALESCE(SUM(e.amount), 0.0) FROM ExpenseEntity e WHERE e.user.email = :email")
+    Double sumExpensesByUserEmail(@Param("email") String email);
 }
