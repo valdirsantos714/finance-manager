@@ -1,135 +1,189 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TarefaModalComponent } from './item-modal.component';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatOptionModule } from '@angular/material/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ItemModalComponent } from './item-modal.component';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { of } from 'rxjs';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TarefaService } from '../../core/services/tarefa.service';
-import { of, throwError } from 'rxjs';
-import { CategoriaEnum } from '../../models/enums/categoria.enum';
-import { PrioridadeEnum } from '../../models/enums/prioridade.enum';
-import { TarefaResponseDto } from '../../models/tarefa.model';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { IncomeService } from '../../../services/income-service/income.service';
+import { ExpenseService } from '../../../services/expense-service/expense.service';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-describe('TarefaModalComponent', () => {
-  let component: TarefaModalComponent;
-  let fixture: ComponentFixture<TarefaModalComponent>;
-  let mockTarefaService: jest.Mocked<TarefaService>;
-  let mockDialogRef: jest.Mocked<MatDialogRef<TarefaModalComponent>>;
+
+describe('ItemModalComponent', () => {
+  let component: ItemModalComponent;
+  let fixture: ComponentFixture<ItemModalComponent>;
+  let incomeServiceMock: any;
+  let expenseServiceMock: any;
+  let dialogRefMock: any;
+
+  const mockDialogDataIncome = {
+    item: null,
+    itemType: 'income'
+  };
+
+  const mockDialogDataExpense = {
+    item: null,
+    itemType: 'expense'
+  };
 
   beforeEach(async () => {
-    mockTarefaService = {
-      criarTarefa: jest.fn(),
-      atualizarTarefa: jest.fn()
-    } as any;
-
-    mockDialogRef = {
+    incomeServiceMock = {
+      createIncome: jest.fn().mockReturnValue(of({})),
+      updateIncome: jest.fn().mockReturnValue(of({})),
+      getAllIncomes: jest.fn().mockReturnValue(of([]))
+    };
+    expenseServiceMock = {
+      createExpense: jest.fn().mockReturnValue(of({})),
+      updateExpense: jest.fn().mockReturnValue(of({})),
+      getAllExpenses: jest.fn().mockReturnValue(of([]))
+    };
+    dialogRefMock = {
       close: jest.fn()
-    } as any;
+    };
 
     await TestBed.configureTestingModule({
-      declarations: [TarefaModalComponent],
+      declarations: [ItemModalComponent],
       imports: [
         ReactiveFormsModule,
-        MatSelectModule,
-        MatOptionModule,
+        NoopAnimationsModule,
         MatFormFieldModule,
         MatInputModule,
         MatSelectModule,
-        MatOptionModule,
-        NoopAnimationsModule,
-        BrowserAnimationsModule,
-        MatDialogModule,
+        MatDatepickerModule,
+        MatNativeDateModule
       ],
       providers: [
-        { provide: TarefaService, useValue: mockTarefaService },
-        { provide: MatDialogRef, useValue: mockDialogRef },
-        { provide: MAT_DIALOG_DATA, useValue: null }
+        FormBuilder,
+        { provide: IncomeService, useValue: incomeServiceMock },
+        { provide: ExpenseService, useValue: expenseServiceMock },
+        { provide: MatDialogRef, useValue: dialogRefMock },
+        { provide: MAT_DIALOG_DATA, useValue: mockDialogDataIncome },
+        { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
+  });
 
-    fixture = TestBed.createComponent(TarefaModalComponent);
+  function setupComponentWithData(data: any) {
+    TestBed.overrideProvider(MAT_DIALOG_DATA, { useValue: data });
+    fixture = TestBed.createComponent(ItemModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
+  }
 
-  it('should create the component', () => {
-    // Given nothing
-
-    // When component initializes
-
-    // Then component should be defined
+  it('should create the component and initialize form with income categories', () => {
+    setupComponentWithData(mockDialogDataIncome);
     expect(component).toBeTruthy();
+    expect(component.categories).toEqual(Object.values(component.categories));
+    expect(component.itemForm).toBeDefined();
   });
 
-  it('should initialize form with data when in edit mode', () => {
-    // Given component receives existing task data
-    const taskData: TarefaResponseDto = {
+  it('should load expense categories when itemType is expense', () => {
+    setupComponentWithData(mockDialogDataExpense);
+    expect(component.categories).toEqual(Object.values(component.categories));
+  });
+
+  it('should patch form values when editing an item', () => {
+    const editItem = {
       id: 1,
-      nomeTarefa: 'Test task',
-      categoria: CategoriaEnum.TRABALHO,
-      prioridade: PrioridadeEnum.ALTA,
-      dataFinalDeFinalizacao: new Date()
+      name: 'Test Income',
+      description: 'Description',
+      amount: 100,
+      category: 'Salary',
+      date: new Date().toISOString()
     };
-
-    component.dados = taskData;
-
-    // When component initializes
-    component.ngOnInit();
-
-    // Then form should be populated with task data
-    expect(component.modoEdicao).toBe(true);
-    expect(component.formularioTarefa.value.nomeTarefa).toBe(taskData.nomeTarefa);
+    setupComponentWithData({ item: editItem, itemType: 'income' });
+    expect(component.isEditMode).toBe(true);
+    expect(component.itemForm.value.name).toBe(editItem.name);
+    expect(component.itemForm.value.amount).toBe(editItem.amount);
   });
 
-  it('should not call save methods if form is invalid', () => {
-    // Given invalid form
-    component.formularioTarefa.patchValue({ nomeTarefa: '', categoria: '', prioridade: '', dataFinalDeFinalizacao: null });
-
-    // When trying to save
-    component.salvar();
-
-    // Then no service call should happen
-    expect(mockTarefaService.criarTarefa).not.toHaveBeenCalled();
-    expect(mockTarefaService.atualizarTarefa).not.toHaveBeenCalled();
-    expect(mockDialogRef.close).not.toHaveBeenCalled();
-  });
-
-  it('should show error on creation failure', () => {
-    // Given form is valid and service fails
-    const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {});
-    jest.spyOn(console, 'error').mockImplementation(() => {});
-    
-    component.formularioTarefa.setValue({
+  it('should create income and close dialog on save when in create income mode', () => {
+    setupComponentWithData(mockDialogDataIncome);
+    component.itemForm.setValue({
       id: null,
-      nomeTarefa: 'Erro',
-      categoria: CategoriaEnum.SAUDE,
-      prioridade: PrioridadeEnum.MEDIA,
-      dataFinalDeFinalizacao: new Date()
+      name: 'New Income',
+      description: 'Desc',
+      amount: 200,
+      category: 'Salary',
+      date: new Date()
     });
-
-    mockTarefaService.criarTarefa.mockReturnValue(throwError(() => 'Erro na criação'));
-
-    // When saving
-    component.salvar();
-
-    // Then alert should be shown
-    expect(alertSpy).toHaveBeenCalledWith('Erro ao criar tarefa: olhe o console pra mais informações');
+    component.save();
+    expect(incomeServiceMock.createIncome).toHaveBeenCalled();
+    expect(dialogRefMock.close).toHaveBeenCalled();
   });
 
-  it('should close dialog with false on cancel', () => {
-    // Given nothing
+  it('should update income and close dialog on save when in edit income mode', () => {
+    const editItem = {
+      id: 2,
+      name: 'Edit Income',
+      description: 'Desc',
+      amount: 300,
+      category: 'Bonus',
+      date: new Date().toISOString()
+    };
+    setupComponentWithData({ item: editItem, itemType: 'income' });
+    component.itemForm.patchValue({ id: editItem.id });
+    component.save();
+    expect(incomeServiceMock.updateIncome).toHaveBeenCalledWith(editItem.id, expect.any(Object));
+    expect(dialogRefMock.close).toHaveBeenCalled();
+  });
 
-    // When closing
-    component.fechar();
+  it('should create expense and close dialog on save when in create expense mode', () => {
+    setupComponentWithData(mockDialogDataExpense);
+    component.itemForm.setValue({
+      id: null,
+      name: 'New Expense',
+      description: 'Desc',
+      amount: 150,
+      category: 'Food',
+      date: new Date()
+    });
+    component.save();
+    expect(expenseServiceMock.createExpense).toHaveBeenCalled();
+    expect(dialogRefMock.close).toHaveBeenCalled();
+  });
 
-    // Then dialog should be closed with false
-    expect(mockDialogRef.close).toHaveBeenCalledWith(false);
+  it('should update expense and close dialog on save when in edit expense mode', () => {
+    const editItem = {
+      id: 3,
+      name: 'Edit Expense',
+      description: 'Desc',
+      amount: 120,
+      category: 'Transport',
+      date: new Date().toISOString()
+    };
+    setupComponentWithData({ item: editItem, itemType: 'expense' });
+    component.itemForm.patchValue({ id: editItem.id });
+    component.save();
+    expect(expenseServiceMock.updateExpense).toHaveBeenCalledWith(editItem.id, expect.any(Object));
+    expect(dialogRefMock.close).toHaveBeenCalled();
+  });
+
+  it('should patch date when updateDate is called', () => {
+    setupComponentWithData(mockDialogDataIncome);
+    const newDate = new Date(2025, 6, 18);
+    component.updateDate({ value: newDate } as any);
+    expect(component.itemForm.value.date).toEqual(newDate);
+  });
+
+  it('should close the dialog when close() is called', () => {
+    setupComponentWithData(mockDialogDataIncome);
+    component.close();
+    expect(dialogRefMock.close).toHaveBeenCalledWith(false);
+  });
+
+  it('should complete destroy$ on ngOnDestroy', () => {
+    setupComponentWithData(mockDialogDataIncome);
+    const spyNext = jest.spyOn(component['destroy$'], 'next');
+    const spyComplete = jest.spyOn(component['destroy$'], 'complete');
+    component.ngOnDestroy();
+    expect(spyNext).toHaveBeenCalled();
+    expect(spyComplete).toHaveBeenCalled();
   });
 });

@@ -2,18 +2,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* Full viewport height */
-    background-color: #f0f2f5; /* Light background color */
-    padding: 16px; /* Add some padding for smaller screens */
-    box-sizing: border-box; /* Include padding in element's total width and height */
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 16px;
+    box-sizing: border-box;
 }
 
 .login-card {
-    max-width: 400px; /* Max width for the card */
-    width: 100%; /* Make it responsive */
+    max-width: 400px;
+    width: 100%;
     padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
 .full-width {
@@ -24,12 +24,16 @@
     color: red;
     font-size: 1.3rem;
     margin-top: 0.5rem;
-    text-align: center; /* Center the error message */
+    text-align: center;
 }
 
-/* Responsive adjustments */
+.register-link-container {
+    text-align: center;
+    margin-top: 16px;
+}
+
 @media (max-width: 600px) {
     .login-card {
-        margin: 0 16px; /* Adjust margin for very small screens */
+        margin: 0 16px;
     }
 }

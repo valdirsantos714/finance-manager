@@ -1,7 +1,7 @@
 .item-container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centraliza o container principal */
+  align-items: center; 
   width: 100%;
 }
 
@@ -17,28 +17,29 @@
 
 .items-container {
   display: flex;
-  flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
-  justify-content: center; /* Centraliza os itens horizontalmente */
-  align-items: flex-start; /* Alinha os itens ao topo quando há muitos */
-  gap: 20px; /* Espaçamento entre os itens */
+  flex-wrap: wrap; 
+  justify-content: center; 
+  align-items: flex-start; 
+  gap: 20px; 
   width: 100%;
-  max-width: 1200px; /* Limita a largura para evitar que se espalhem demais */
-  padding: 0 10px; /* Adiciona um pouco de padding nas laterais */
+  max-width: 1200px; 
+  padding: 0.5rem 10px; 
 }
 
 .item-card {
-  flex: 1 1 calc(33% - 40px); /* 3 itens por linha, considerando o gap */
+  flex: 1 1 calc(33% - 40px);
   max-width: calc(33% - 40px);
-  min-width: 280px; /* Largura mínima para os cards */
+  min-width: 280px; 
   box-sizing: border-box;
   display: flex;
+  gap: 1rem;
   flex-direction: column;
   justify-content: space-between;
-  height: auto; /* Ajusta a altura automaticamente */
+  height: auto; 
 }
 
 .item-card mat-card-title {
-  font-size: 1.2em; /* Aumenta o tamanho da fonte do título do item */
+  font-size: 1.2em; 
   font-weight: bold;
 }
 
@@ -60,19 +61,35 @@ mat-card-actions {
   display: flex;
   justify-content: center; 
   align-items: center;
-  gap: 10px; /* Espaçamento entre os botões */
+  gap: 10px; 
 }
+
+mat-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card-content p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+mat-card-content p strong {
+  margin-right: 0.25rem;
+  letter-spacing: 0.5px;
+}
+
 
 @media (max-width: 900px) {
   .item-card {
-    flex: 1 1 calc(50% - 30px); /* 2 itens por linha em telas menores */
+    flex: 1 1 calc(50% - 30px); 
     max-width: calc(50% - 30px);
   }
 }
 
 @media (max-width: 600px) {
   .item-card {
-    flex: 1 1 100%; /* 1 item por linha em telas muito pequenas */
+    flex: 1 1 100%; 
     max-width: 100%;
   }
 }

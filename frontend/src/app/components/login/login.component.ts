@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy{
     .pipe(takeUntil(this.destroy$))
     .subscribe({
       next: (response: AuthResponse) => {
-        console.log('Login successful: olha aqui o token:', response.tokenJWT);
+        console.log('Login successful')
         document.cookie = `jwt=${response.tokenJWT}; path=/; secure`;
         this.router.navigate(['/dashboard']);
       },
