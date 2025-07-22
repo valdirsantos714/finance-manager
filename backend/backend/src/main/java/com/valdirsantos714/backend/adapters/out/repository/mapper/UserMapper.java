@@ -1,7 +1,7 @@
 package com.valdirsantos714.backend.adapters.out.repository.mapper;
 
 import com.valdirsantos714.backend.adapters.in.dto.UserRequestDTO;
-import com.valdirsantos714.backend.adapters.in.dto.UserResponseDTO;
+import com.valdirsantos714.backend.adapters.out.dto.UserResponseDTO;
 import com.valdirsantos714.backend.adapters.out.repository.entity.UserEntity;
 import com.valdirsantos714.backend.application.core.domain.User;
 import org.springframework.security.core.userdetails.UserDetails;

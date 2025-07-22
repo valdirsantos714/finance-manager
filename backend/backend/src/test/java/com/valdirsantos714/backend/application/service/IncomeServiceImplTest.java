@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -109,7 +109,7 @@ class IncomeServiceImplTest {
     @DisplayName("should find incomes by user email")
     void shouldFindByUserEmail() {
         // given
-        when(repository.findByUserEmail("admin@email.com")).thenReturn(Arrays.asList(income));
+        when(repository.findByUserEmail("admin@email.com")).thenReturn(Collections.singletonList(income));
 
         // when
         List<Income> result = service.findByUserEmail("admin@email.com");

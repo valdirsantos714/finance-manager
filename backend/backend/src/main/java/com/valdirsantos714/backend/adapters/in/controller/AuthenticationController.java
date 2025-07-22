@@ -3,6 +3,7 @@ package com.valdirsantos714.backend.adapters.in.controller;
 import com.valdirsantos714.backend.adapters.in.dto.AuthenticationRequestDto;
 import com.valdirsantos714.backend.adapters.in.dto.DadosToken;
 import com.valdirsantos714.backend.adapters.in.dto.UserRequestDTO;
+import com.valdirsantos714.backend.adapters.out.dto.UserResponseDTO;
 import com.valdirsantos714.backend.adapters.out.repository.entity.UserEntity;
 import com.valdirsantos714.backend.adapters.out.repository.mapper.UserMapper;
 import com.valdirsantos714.backend.application.service.UserServiceImpl;
@@ -11,13 +12,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.stream.Stream;
+
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin("*")
@@ -42,11 +46,11 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @PostMapping("/login")
-    public ResponseEntity efetuarLogin(@RequestBody @Valid AuthenticationRequestDto dto){
-        System.out.println("Recebendo dados de autenticação: " + dto.email());
+    public ResponseEntity<DadosToken> efetuarLogin(@RequestBody @Valid AuthenticationRequestDto dto){
+        log.info("Recebendo dados de autenticação: {} ", dto.email());
         var authenticationToken = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var authentication = manager.authenticate(authenticationToken);
-        System.out.println(authentication.getPrincipal());
+        log.info("{}", authentication.getPrincipal());
         var tokenJWT = tokenService.geraToken((UserEntity) authentication.getPrincipal());
         return ResponseEntity.ok(new DadosToken(tokenJWT));
     }
@@ -58,7 +62,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @PostMapping("/register")
-    public ResponseEntity efetuarCadastro(@RequestBody @Valid UserRequestDTO dto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<UserResponseDTO> efetuarCadastro(@RequestBody @Valid UserRequestDTO dto, UriComponentsBuilder uriBuilder){
         var user = service.save(dto);
         var uri = uriBuilder.path("/admin/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(UserMapper.toResponseDTO(user));
@@ -72,7 +76,7 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @GetMapping("/all")
-    public ResponseEntity findAllUsers() {
+    public ResponseEntity<Stream<UserResponseDTO>> findAllUsers() {
         var list = service.findAll();
         return ResponseEntity.ok(list.stream().map(UserMapper::toResponseDTO));
     }

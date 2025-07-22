@@ -1,4 +1,4 @@
-package com.valdirsantos714.backend.adapters.in.dto;
+package com.valdirsantos714.backend.adapters.out.dto;
 
 import com.valdirsantos714.backend.application.core.domain.enums.ExpenseCategory;
 import java.time.LocalDate;

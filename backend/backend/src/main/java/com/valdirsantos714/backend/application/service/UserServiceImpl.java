@@ -45,8 +45,8 @@ public class UserServiceImpl implements UserUseCases {
     }
 
     @Override
-    public User update(Long id, UserRequestDTO User) {
-        return userRepositoryAdapter.update(id, UserMapper.toUser(User));
+    public User update(Long id, UserRequestDTO user) {
+        return userRepositoryAdapter.update(id, UserMapper.toUser(user));
     }
 
     @Override

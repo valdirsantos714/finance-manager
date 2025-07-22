@@ -1,7 +1,7 @@
 package com.valdirsantos714.backend.adapters.out.repository.mapper;
 
 import com.valdirsantos714.backend.adapters.in.dto.IncomeRequestDTO;
-import com.valdirsantos714.backend.adapters.in.dto.IncomeResponseDTO;
+import com.valdirsantos714.backend.adapters.out.dto.IncomeResponseDTO;
 import com.valdirsantos714.backend.adapters.out.repository.entity.IncomeEntity;
 import com.valdirsantos714.backend.adapters.out.repository.entity.UserEntity;
 import com.valdirsantos714.backend.application.core.domain.Income;

@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.valdirsantos714.backend.adapters.out.repository.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -31,7 +32,7 @@ public class TokenService {
                     .sign(algorithm);
 
         } catch (JWTCreationException exception){
-            throw new RuntimeException(TOKEN_CREATION_ERROR, exception);
+            throw new JWTCreationException(TOKEN_CREATION_ERROR, exception);
         }
     }
 
@@ -49,7 +50,7 @@ public class TokenService {
                     .getSubject();
 
         } catch (JWTVerificationException exception) {
-            throw new RuntimeException(TOKEN_VERIFICATION_ERROR + exception);
+            throw new BadCredentialsException(TOKEN_VERIFICATION_ERROR + exception);
         }
 
     }

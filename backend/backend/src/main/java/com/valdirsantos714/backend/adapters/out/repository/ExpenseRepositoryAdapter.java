@@ -67,7 +67,7 @@ public class ExpenseRepositoryAdapter implements ExpenseRepository {
 
     private UserEntity getUserByEmail(String email) {
         return userJpaRepository.findByEmail(email)
-            .map(user -> (UserEntity) user)
+            .map(UserEntity.class::cast)
             .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND_MESSAGE + email));
     }
 }

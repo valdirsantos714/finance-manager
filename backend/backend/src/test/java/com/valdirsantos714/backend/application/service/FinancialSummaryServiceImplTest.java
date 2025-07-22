@@ -1,6 +1,6 @@
 package com.valdirsantos714.backend.application.service;
 
-import com.valdirsantos714.backend.adapters.in.dto.FinancialSummaryResponseDTO;
+import com.valdirsantos714.backend.adapters.out.dto.FinancialSummaryResponseDTO;
 import com.valdirsantos714.backend.adapters.out.repository.ExpenseJpaRepository;
 import com.valdirsantos714.backend.adapters.out.repository.IncomeJpaRepository;
 import org.junit.jupiter.api.DisplayName;
