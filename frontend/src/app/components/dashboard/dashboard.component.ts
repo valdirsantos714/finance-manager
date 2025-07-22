@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { FinancialService } from '../../services/financial-service/financial.service';
 import { FinancialSummary } from '../../models/FinancialSummary';
+import { AuthService } from '../../services/auth-service/auth.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,7 +16,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private readonly financialService: FinancialService
+    private readonly financialService: FinancialService,
+    private authService: AuthService
   ) { }
 
   ngOnInit(): void {
@@ -48,6 +50,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   gerenciarDespesa(): void {
     this.router.navigate(['/gerenciar-despesa']);
+  }
+
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   ngOnDestroy(): void {
