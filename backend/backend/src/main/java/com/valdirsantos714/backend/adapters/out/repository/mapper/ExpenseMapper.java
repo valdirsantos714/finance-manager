@@ -1,7 +1,7 @@
 package com.valdirsantos714.backend.adapters.out.repository.mapper;
 
 import com.valdirsantos714.backend.adapters.in.dto.ExpenseRequestDTO;
-import com.valdirsantos714.backend.adapters.in.dto.ExpenseResponseDTO;
+import com.valdirsantos714.backend.adapters.out.dto.ExpenseResponseDTO;
 import com.valdirsantos714.backend.adapters.out.repository.entity.ExpenseEntity;
 import com.valdirsantos714.backend.application.core.domain.Expense;
 import com.valdirsantos714.backend.application.core.domain.User;

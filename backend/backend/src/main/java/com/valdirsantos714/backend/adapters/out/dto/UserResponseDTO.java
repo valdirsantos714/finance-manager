@@ -1,4 +1,4 @@
-package com.valdirsantos714.backend.adapters.in.dto;
+package com.valdirsantos714.backend.adapters.out.dto;
 
 public record UserResponseDTO(
         Long id,

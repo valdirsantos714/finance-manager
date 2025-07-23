@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { RendaDashboardComponent } from '../components/renda-dashboard/renda-dashboard.component';
 import { DespesaDashboardComponent } from '../components/despesa-dashboard/despesa-dashboard.component';
 import { ItemListComponent } from '../components/shared/item-list/item-list.component';
@@ -41,7 +42,8 @@ registerLocaleData(localePt);
     MatIconModule,
     MatCardModule,
     MatSnackBarModule,
-    MatListModule
+    MatListModule,
+    MatToolbarModule
   ],
   exports: [
     RendaDashboardComponent,
@@ -60,7 +62,8 @@ registerLocaleData(localePt);
     MatCardModule,
     MatSnackBarModule,
     MatListModule,
-    ItemListComponent
+    ItemListComponent,
+    MatToolbarModule
   ],
   providers: [
     { provide: MatDialogRef, useValue: {} },

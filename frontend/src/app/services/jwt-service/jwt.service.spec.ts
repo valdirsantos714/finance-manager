@@ -140,4 +140,18 @@ describe('JwtService', () => {
     expect(service.createHeaders).toHaveBeenCalled();
     expect(result).toEqual({ email: mockEmail, headers: mockHeaders });
   });
+
+  it('should remove the JWT token from the cookie', () => {
+    // Given
+    Object.defineProperty(document, 'cookie', {
+      writable: true,
+      value: 'jwt=mock-token; otherCookie=value',
+    });
+
+    // When
+    service.removeTokenFromCookie();
+
+    // Then
+    expect(document.cookie).toBe('jwt=;');
+  });
 });

@@ -45,4 +45,8 @@ export class JwtService {
 
     return { email, headers };
   }
+
+  removeTokenFromCookie(): void {
+    document.cookie = "jwt=;";
+  }
 }

@@ -1,7 +1,7 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IncomeResponse } from '../../models/IncomeResponse';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { JwtService } from '../jwt-service/jwt.service';
 import { IncomeRequest } from '../../models/IncomeRequest';
 
@@ -9,10 +9,10 @@ import { IncomeRequest } from '../../models/IncomeRequest';
   providedIn: 'root'
 })
 export class IncomeService {
-  private baseUrl: string = 'http://localhost:8080/api/incomes';
+  private readonly baseUrl: string = 'http://localhost:8080/api/incomes';
 
-  constructor(private http: HttpClient,
-    private jwtService: JwtService
+  constructor(private readonly http: HttpClient,
+    private readonly jwtService: JwtService
   ) { }
 
   getAllIncomes(): Observable<IncomeResponse[]> {

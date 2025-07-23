@@ -3,26 +3,40 @@ import { FinancialService } from '../../services/financial-service/financial.ser
 import { of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { TestBed } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth-service/auth.service';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
-  let financialServiceMock: any;
-  let routerMock: any;
+  let financialServiceMock: jest.Mocked<FinancialService>;
+  let routerMock: jest.Mocked<Router>;
+  let httpClientMock: jest.Mocked<HttpClient>;
+  let authServiceMock: jest.Mocked<AuthService>;
 
   beforeEach(() => {
     financialServiceMock = {
       getFinancialSummary: jest.fn()
-    };
+    } as unknown as jest.Mocked<FinancialService>;
 
     routerMock = {
       navigate: jest.fn()
-    };
+    } as unknown as jest.Mocked<Router>;
+
+    httpClientMock = {
+      get: jest.fn()
+    } as unknown as jest.Mocked<HttpClient>;
+
+    authServiceMock = {
+      logout: jest.fn()
+    } as unknown as jest.Mocked<AuthService>;
 
     TestBed.configureTestingModule({
       providers: [
         DashboardComponent,
         { provide: FinancialService, useValue: financialServiceMock },
-        { provide: Router, useValue: routerMock }
+        { provide: Router, useValue: routerMock },
+        { provide: HttpClient, useValue: httpClientMock },
+        { provide: AuthService, useValue: authServiceMock }
       ]
     });
 
@@ -93,5 +107,14 @@ describe('DashboardComponent', () => {
     // Then
     expect(nextSpy).toHaveBeenCalled();
     expect(completeSpy).toHaveBeenCalled();
+  });
+
+  it('should call authService.logout and navigate to /login when logout is called', () => {
+    // When
+    component.logout();
+
+    // Then
+    expect(authServiceMock.logout).toHaveBeenCalled();
+    expect(routerMock.navigate).toHaveBeenCalledWith(['/login']);
   });
 });

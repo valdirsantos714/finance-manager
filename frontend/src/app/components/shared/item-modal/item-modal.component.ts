@@ -24,7 +24,7 @@ import { ItemRequest } from '../../../models/types/ItemRequest';
 export class ItemModalComponent implements OnInit, OnDestroy {
   itemForm!: FormGroup;
   isEditMode = false;
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   categories: string[] = [];
   itemType!: ItemType;
 
