@@ -24,10 +24,7 @@ import java.util.List;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity implements UserDetails, Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
+public class UserEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -10,16 +10,12 @@ import com.valdirsantos714.backend.application.core.domain.User;
 import com.valdirsantos714.backend.application.core.domain.enums.UserRole;
 import com.valdirsantos714.backend.application.service.UserServiceImpl;
 import com.valdirsantos714.backend.configuration.TestSecurityConfiguration;
-import com.valdirsantos714.backend.infrastructure.security.SecurityFilter;
 import com.valdirsantos714.backend.infrastructure.security.TokenService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
@@ -27,22 +23,16 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Import(TestSecurityConfiguration.class)
 @WebMvcTest(AuthenticationController.class)
+@Import(TestSecurityConfiguration.class)
 class AuthenticationControllerTest {
 
     @Autowired
@@ -59,9 +49,6 @@ class AuthenticationControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @MockBean
-    private SecurityFilter securityFilter;
 
     @MockBean
     private UserRepositoryAdapter userRepositoryAdapter;
@@ -85,8 +72,7 @@ class AuthenticationControllerTest {
         // When + Then
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDto))
-                        .with(csrf()))
+                        .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.tokenJWT").value("mocked-jwt-token"));
     }
@@ -128,46 +114,9 @@ class AuthenticationControllerTest {
         // When + Then
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO))
-                        .with(csrf()))
+                        .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(requestDTO.name()))
                 .andExpect(jsonPath("$.email").value(requestDTO.email()));
-    }
-
-    @Test
-    @DisplayName("should return all users when authenticated as ADMIN")
-    @WithMockUser(username = "admin", roles = {"ADMIN"})
-    void shouldFindAllUsersAsAdmin() throws Exception {
-        // Given
-        User user1 = new User();
-        user1.setId(1L);
-        user1.setName("User 1");
-        user1.setEmail("user1@example.com");
-        user1.setRole(UserRole.USER);
-
-        User user2 = new User();
-        user2.setId(2L);
-        user2.setName("User 2");
-        user2.setEmail("user2@example.com");
-        user2.setRole(UserRole.ADMIN);
-
-        given(userService.findAll()).willReturn(List.of(user1, user2));
-
-        // When + Then
-        mockMvc.perform(get("/api/auth/all")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name").value("User 1"))
-                .andExpect(jsonPath("$[1].name").value("User 2"));
-    }
-
-    @Test
-    @DisplayName("should return 403 when accessing all users without ADMIN role")
-    void shouldReturn403WhenFindAllUsersWithoutAdminRole() throws Exception {
-        // When + Then
-        mockMvc.perform(get("/api/auth/all")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isForbidden());
     }
 }

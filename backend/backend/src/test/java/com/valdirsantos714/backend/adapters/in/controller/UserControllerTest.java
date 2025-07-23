@@ -6,20 +6,16 @@ import com.valdirsantos714.backend.adapters.out.repository.mapper.UserMapper;
 import com.valdirsantos714.backend.application.core.domain.User;
 import com.valdirsantos714.backend.application.core.domain.enums.UserRole;
 import com.valdirsantos714.backend.application.service.UserServiceImpl;
-import com.valdirsantos714.backend.infrastructure.security.SecurityFilter;
-import com.valdirsantos714.backend.infrastructure.security.TokenService;
+import com.valdirsantos714.backend.configuration.TestSecurityConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -27,12 +23,11 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
+@Import(TestSecurityConfiguration.class)
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
@@ -44,12 +39,6 @@ class UserControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @MockBean
-    private TokenService tokenService;
-
-    @MockBean
-    private SecurityFilter securityFilter;
 
     @Test
     @DisplayName("should create a new user and return 201 status")
@@ -72,8 +61,7 @@ class UserControllerTest {
         // When + Then
         mockMvc.perform(post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO))
-                        .with(csrf()))
+                        .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value(requestDTO.name()))
                 .andExpect(jsonPath("$.email").value(requestDTO.email()));
@@ -121,8 +109,7 @@ class UserControllerTest {
         // When + Then
         mockMvc.perform(put("/api/users/{id}", id)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(requestDTO))
-                        .with(csrf()))
+                        .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Updated User"))
                 .andExpect(jsonPath("$.email").value("updated@example.com"));
@@ -136,8 +123,7 @@ class UserControllerTest {
         Long id = 1L;
 
         // When + Then
-        mockMvc.perform(delete("/api/users/{id}", id)
-                        .with(csrf()))
+        mockMvc.perform(delete("/api/users/{id}", id))
                 .andExpect(status().isNoContent());
 
         Mockito.verify(service).delete(id);

@@ -10,7 +10,6 @@ import com.valdirsantos714.backend.application.service.UserServiceImpl;
 import com.valdirsantos714.backend.infrastructure.security.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.stream.Stream;
 
 @Slf4j
 @RestController
@@ -66,18 +63,5 @@ public class AuthenticationController {
         var user = service.save(dto);
         var uri = uriBuilder.path("/admin/{id}").buildAndExpand(user.getId()).toUri();
         return ResponseEntity.created(uri).body(UserMapper.toResponseDTO(user));
-    }
-
-    @Operation(security = { @SecurityRequirement(name = "bearer-key") },
-            summary = "Retorna lista de todos os usuários",  responses = {
-            @ApiResponse(description = "Requisição feita com sucesso", responseCode = "200"),
-            @ApiResponse(responseCode = "401", description = "Erro de autenticação"),
-            @ApiResponse(responseCode = "403", description = "Requisição não autorizada"),
-            @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-    })
-    @GetMapping("/all")
-    public ResponseEntity<Stream<UserResponseDTO>> findAllUsers() {
-        var list = service.findAll();
-        return ResponseEntity.ok(list.stream().map(UserMapper::toResponseDTO));
     }
 }
