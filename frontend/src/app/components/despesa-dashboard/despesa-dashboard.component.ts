@@ -13,12 +13,12 @@ import { ItemModalComponent } from '../shared/item-modal/item-modal.component';
   styleUrl: './despesa-dashboard.component.css'
 })
 export class DespesaDashboardComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   public despesas!: ListItem[];
 
   constructor(
-    private expenseService: ExpenseService,
-    private dialog: MatDialog
+    private readonly expenseService: ExpenseService,
+    private readonly dialog: MatDialog
   ) { }
 
   ngOnInit(): void {

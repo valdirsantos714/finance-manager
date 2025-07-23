@@ -3,20 +3,31 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { AuthService } from './auth.service';
 import { AuthResponse } from '../../models/AuthResponse';
 import { RegisterResponse } from '../../models/RegisterResponse';
+import { JwtService } from '../jwt-service/jwt.service';
 
 describe('AuthService', () => {
   let service: AuthService;
   let httpTestingController: HttpTestingController;
+  let jwtService: JwtService;
   const baseUrl: string = 'http://localhost:8080/api/auth';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [AuthService],
+      providers: [
+        AuthService,
+        {
+          provide: JwtService,
+          useValue: {
+            removeTokenFromCookie: jest.fn(),
+          },
+        },
+      ],
     });
 
     service = TestBed.inject(AuthService);
     httpTestingController = TestBed.inject(HttpTestingController);
+    jwtService = TestBed.inject(JwtService);
   });
 
   afterEach(() => {
@@ -60,5 +71,13 @@ describe('AuthService', () => {
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ name, email, password });
     req.flush(mockRegisterResponse);
+  });
+
+  it('should call removeTokenFromCookie when logout is called', () => {
+    // When
+    service.logout();
+
+    // Then
+    expect(jwtService.removeTokenFromCookie).toHaveBeenCalled();
   });
 });

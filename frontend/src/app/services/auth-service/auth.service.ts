@@ -10,9 +10,9 @@ import { JwtService } from '../jwt-service/jwt.service';
 })
 export class AuthService {
 
-  private baseUrl: string = 'http://localhost:8080/api/auth';
+  private readonly baseUrl: string = 'http://localhost:8080/api/auth';
 
-  constructor(private http: HttpClient, private jwtService: JwtService) { }
+  constructor(private readonly http: HttpClient, private readonly jwtService: JwtService) { }
 
   login(email: string, password: string): Observable<AuthResponse>{
     return this.http.post<AuthResponse>(`${this.baseUrl}/login`, { email, password });

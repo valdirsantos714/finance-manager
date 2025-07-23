@@ -11,7 +11,7 @@ import { ItemAction } from '../../models/enums/ItemAction';
   styleUrl: './renda-dashboard.component.css'
 })
 export class RendaDashboardComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   public rendas!: ListItem[];
 
   constructor(

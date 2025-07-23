@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Add CommonModule import
 import { ItemModalComponent } from './item-modal.component';
 import { SharedModule } from '../../../shared/shared.module';
 

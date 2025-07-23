@@ -11,13 +11,13 @@ import { Router } from '@angular/router';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit, OnDestroy{
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   public registerForm!: FormGroup;
   public errorMessage: string | null = null;
 
-  constructor(private authService: AuthService,
-    private formBuilder: FormBuilder,
-    private router: Router 
+  constructor(private readonly authService: AuthService,
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router 
   ) { }
   
   ngOnInit(): void {

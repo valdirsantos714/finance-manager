@@ -10,10 +10,10 @@ import { JwtService } from '../jwt-service/jwt.service';
   providedIn: 'root'
 })
 export class ExpenseService {
-  private baseUrl: string = 'http://localhost:8080/api/expenses';
+  private readonly baseUrl: string = 'http://localhost:8080/api/expenses';
 
-  constructor(private http: HttpClient,
-    private jwtService: JwtService
+  constructor(private readonly http: HttpClient,
+    private readonly jwtService: JwtService
   ) { }
 
   getAllExpenses():Observable<ExpenseResponse[]> {

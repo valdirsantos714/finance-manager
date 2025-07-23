@@ -11,13 +11,13 @@ import { AuthService } from '../../services/auth-service/auth.service';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   public financialSummary!: FinancialSummary;
 
   constructor(
-    private router: Router,
+    private readonly router: Router,
     private readonly financialService: FinancialService,
-    private authService: AuthService
+    private readonly authService: AuthService
   ) { }
 
   ngOnInit(): void {

@@ -15,7 +15,7 @@ export class ItemListComponent {
   @Input() itemType!: ItemType;
   @Output() itemAction = new EventEmitter<{ item: ListItem, action: ItemAction }>();
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private readonly dialog: MatDialog) {}
 
   onEdit(item: ListItem): void {
     this.openItemModal(item);

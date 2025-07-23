@@ -14,10 +14,10 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (isPlatformBrowser(platformId)) {
     const cookies = document.cookie.split(';');
     let token = null;
-    for (let i = 0; i < cookies.length; i++) {
-      let cookie = cookies[i].trim();
-      if (cookie.startsWith('jwt=')) {
-        token = cookie.substring(4);
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name == 'jwt') {
+        token = value;
         break;
       }
     }
