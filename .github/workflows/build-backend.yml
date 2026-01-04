@@ -10,6 +10,6 @@ jobs:
   build-backend:
     uses: valdirsantos714/reusable_workflows/.github/workflows/build-java.yaml@main
     with:
-      working-directory: 'backend'
+      working-directory: 'backend/backend'
       java-version: '17'
       push-image: false
