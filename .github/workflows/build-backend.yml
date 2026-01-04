@@ -12,4 +12,4 @@ jobs:
     with:
       working-directory: 'backend'
       java-version: '17'
-      publish-docker: false
+      push-image: false

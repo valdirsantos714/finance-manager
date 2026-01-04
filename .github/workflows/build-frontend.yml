@@ -15,4 +15,4 @@ jobs:
     with:
       working-directory: 'frontend'
       node-version: '20'
-      publish-docker: false
+      push-image: false
