@@ -3,7 +3,8 @@ name: Java Manual Verification
 permissions:
   contents: write
 
-workflow_dispatch:
+on:
+  workflow_dispatch:
     inputs:
       execution_mode:
         description: 'Select execution mode'
