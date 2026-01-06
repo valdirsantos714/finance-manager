@@ -14,7 +14,13 @@ on:
           - 'Build Only'
           - 'Build + Push to Docker Hub'
 jobs:
-  call-docker:
-    uses: valdirsantos714/reusable_workflows/.github/workflows/build-nodejs.yaml
+  call-build-frontend:
+    uses: valdirsantos714/reusable_workflows/.github/workflows/build-nodejs.yaml@main
     with:
-      push_image: ${{ github.event.inputs.execution_mode == 'Build + Push to Docker Hub' }}
+      working-directory: 'frontend'
+      node-version: '20'
+      push-image: ${{ github.event.inputs.execution_mode == 'Build + Push to Docker Hub' }}
+      docker-image-name: finance-manager-frontend
+    secrets:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
